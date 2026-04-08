@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendConfirmationEmail } from "@/lib/email";
 
 export async function POST(
   request: Request,
@@ -29,7 +30,30 @@ export async function POST(
         status: "pago",
         paidAt: new Date(),
       },
+      include: {
+        proposal: {
+          include: {
+            lead: true,
+            card: true,
+          },
+        },
+      },
     });
+
+    // Send confirmation email (non-blocking)
+    try {
+      const { proposal } = updatedPayment;
+      await sendConfirmationEmail(proposal.lead.email, {
+        nome: proposal.lead.nome,
+        cardName: proposal.card.nome,
+        cardBandeira: proposal.card.bandeira,
+        limiteBrl: proposal.limiteBrl,
+        moeda: proposal.moeda,
+        limiteEstrangeiro: proposal.limiteEstrangeiro,
+      });
+    } catch (emailError) {
+      console.error("Failed to send confirmation email:", emailError);
+    }
 
     return NextResponse.json({
       paymentId: updatedPayment.id,
