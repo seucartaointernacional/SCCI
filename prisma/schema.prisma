@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -10,4 +5,56 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+}
+
+model Card {
+  id            String   @id @default(cuid())
+  nome          String
+  bandeira      String
+  corPrimaria   String
+  corSecundaria String
+  corTexto      String
+  moedas        String   // JSON array: ["USD","EUR"]
+  proposals     Proposal[]
+  createdAt     DateTime @default(now())
+}
+
+model Lead {
+  id             String   @id @default(cuid())
+  nome           String
+  cpfCnpj        String   @unique
+  email          String
+  telefone       String
+  cep            String
+  cidade         String
+  estado         String
+  renda          Float
+  limiteDesejado Float
+  negativado     Boolean
+  proposals      Proposal[]
+  createdAt      DateTime @default(now())
+}
+
+model Proposal {
+  id                String   @id @default(cuid())
+  leadId            String
+  lead              Lead     @relation(fields: [leadId], references: [id])
+  cardId            String
+  card              Card     @relation(fields: [cardId], references: [id])
+  moeda             String
+  limiteEstrangeiro Float
+  limiteBrl         Float
+  status            String   @default("pendente")
+  payment           Payment?
+  createdAt         DateTime @default(now())
+}
+
+model Payment {
+  id         String    @id @default(cuid())
+  proposalId String    @unique
+  proposal   Proposal  @relation(fields: [proposalId], references: [id])
+  valor      Float
+  status     String    @default("aguardando")
+  paidAt     DateTime?
+  createdAt  DateTime  @default(now())
 }
