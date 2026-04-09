@@ -19,8 +19,9 @@ export default function HeroSection() {
           >
             <h1 className="text-3xl lg:text-5xl font-extrabold tracking-tight leading-tight">
               Cartão de crédito internacional aprovado{" "}
-              <span className="bg-emerald-500 text-white px-3 py-1 rounded-lg inline-block mt-1">
+              <span className="relative inline-block">
                 mesmo com nome negativado
+                <span className="absolute left-0 right-0 bottom-0 h-[6px] bg-emerald-400/60 rounded-full -mb-0.5" />
               </span>
             </h1>
 
