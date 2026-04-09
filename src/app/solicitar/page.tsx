@@ -33,7 +33,7 @@ export default function SolicitarPage() {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="text-gray-600 text-base font-bold mb-3"
           >
-            Preencha o cadastro e descubra se você tem crédito aprovado.
+            Preencha com seus dados, ambiente seguro.
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }}
