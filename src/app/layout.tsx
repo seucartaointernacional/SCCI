@@ -10,9 +10,9 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Seu Cartao Internacional | Cartao de Credito Internacional sem Burocracia",
+  title: "Seu Cartão Internacional | Cartão de Crédito Internacional sem Burocracia",
   description:
-    "Solicite seu cartao de credito internacional em minutos. Aceitamos negativados. Processo 100% online com entrega em todo o Brasil. CNPJ 85.557.385/0001-45.",
+    "Solicite seu cartão de crédito internacional em minutos. Aceitamos negativados. Processo 100% online com entrega em todo o Brasil. CNPJ 85.557.385/0001-45.",
 };
 
 export default function RootLayout({

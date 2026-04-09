@@ -95,7 +95,7 @@ export default function AdminLayout({
         {/* Logo */}
         <div className="py-6 px-6">
           <span className="text-sm font-bold text-gray-900">
-            Seu Cartao Internacional
+            Seu Cartão Internacional
           </span>
         </div>
 
@@ -143,7 +143,7 @@ export default function AdminLayout({
           <MenuIcon size={20} />
         </button>
         <span className="ml-3 text-sm font-bold text-gray-900">
-          Seu Cartao Internacional
+          Seu Cartão Internacional
         </span>
       </div>
 

@@ -1,7 +1,7 @@
 export default function StatsBar() {
   const stats = [
-    { highlight: "+5.000", label: "cartoes emitidos" },
-    { highlight: "98%", label: "de aprovacao" },
+    { highlight: "+5.000", label: "cartões emitidos" },
+    { highlight: "98%", label: "de aprovação" },
     { highlight: "Sem consulta", label: "ao SPC/Serasa" },
   ];
 

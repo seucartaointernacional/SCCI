@@ -6,34 +6,34 @@ import { ChevronDownIcon } from "@/components/icons";
 
 const faqs = [
   {
-    question: "O que e o Seu Cartao Internacional?",
+    question: "O que é o Seu Cartão Internacional?",
     answer:
-      "Somos uma plataforma que conecta voce as melhores ofertas de cartoes de credito internacionais de bancos parceiros. Facilitamos todo o processo para que voce receba seu cartao sem burocracia.",
+      "Somos uma plataforma que conecta você às melhores ofertas de cartões de crédito internacionais de bancos parceiros. Facilitamos todo o processo para que você receba seu cartão sem burocracia.",
   },
   {
     question: "Como funciona o processo?",
     answer:
-      "Voce preenche seus dados no formulario, nosso sistema analisa seu perfil e apresenta a melhor proposta disponivel. Se voce aceitar, o cartao e enviado para o endereco informado.",
+      "Você preenche seus dados no formulário, nosso sistema analisa seu perfil e apresenta a melhor proposta disponível. Se você aceitar, o cartão é enviado para o endereço informado.",
   },
   {
     question: "Preciso ter o nome limpo para solicitar?",
     answer:
-      "Nao. Mesmo com restricoes no SPC ou Serasa, voce pode fazer a solicitacao. A analise e feita de forma independente com base no seu perfil completo.",
+      "Não. Mesmo com restrições no SPC ou Serasa, você pode fazer a solicitação. A análise é feita de forma independente com base no seu perfil completo.",
   },
   {
-    question: "Quanto tempo leva para receber o cartao?",
+    question: "Quanto tempo leva para receber o cartão?",
     answer:
-      "O prazo de entrega e de 22 a 36 dias uteis apos a confirmacao, dependendo da sua regiao.",
+      "O prazo de entrega é de 22 a 36 dias úteis após a confirmação, dependendo da sua região.",
   },
   {
-    question: "Meus dados estao seguros?",
+    question: "Meus dados estão seguros?",
     answer:
-      "Sim. Utilizamos criptografia de ponta a ponta e nao compartilhamos suas informacoes com terceiros. Nossa plataforma segue as melhores praticas de seguranca digital.",
+      "Sim. Utilizamos criptografia de ponta a ponta e não compartilhamos suas informações com terceiros. Nossa plataforma segue as melhores práticas de segurança digital.",
   },
   {
-    question: "Quais bandeiras estao disponiveis?",
+    question: "Quais bandeiras estão disponíveis?",
     answer:
-      "Trabalhamos com as principais bandeiras do mercado, incluindo Visa e Mastercard, aceitas em milhoes de estabelecimentos ao redor do mundo.",
+      "Trabalhamos com as principais bandeiras do mercado, incluindo Visa e Mastercard, aceitas em milhões de estabelecimentos ao redor do mundo.",
   },
 ];
 
@@ -48,7 +48,7 @@ export default function FAQ() {
     <section id="duvidas" className="py-20 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-14">
-          <h2 className="section-title">Duvidas frequentes</h2>
+          <h2 className="section-title">Dúvidas frequentes</h2>
         </div>
 
         <div className="divide-y divide-gray-100">

@@ -7,13 +7,13 @@ export default function Footer() {
         {/* Top */}
         <div className="mb-8">
           <h3 className="text-lg font-bold tracking-tight mb-3">
-            Seu Cartao{" "}
+            Seu Cartão{" "}
             <span className="text-brand-400">Internacional</span>
           </h3>
           <p className="text-gray-400 text-sm leading-relaxed max-w-xl">
-            Seu Cartao Internacional e uma plataforma intermediaria que conecta
-            voce as melhores ofertas de cartoes de credito internacionais de
-            bancos parceiros. Nao somos um banco ou instituicao financeira.
+            Seu Cartão Internacional é uma plataforma intermediária que conecta
+            você às melhores ofertas de cartões de crédito internacionais de
+            bancos parceiros. Não somos um banco ou instituição financeira.
           </p>
         </div>
 
@@ -29,7 +29,7 @@ export default function Footer() {
             href="#beneficios"
             className="text-gray-400 hover:text-white transition-colors"
           >
-            Beneficios
+            Benefícios
           </a>
           <a
             href="#depoimentos"
@@ -41,7 +41,7 @@ export default function Footer() {
             href="#duvidas"
             className="text-gray-400 hover:text-white transition-colors"
           >
-            Duvidas
+            Dúvidas
           </a>
         </div>
 
@@ -49,7 +49,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 pt-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
             <span>
-              &copy; 2026 Seu Cartao Internacional. Todos os direitos
+              &copy; 2026 Seu Cartão Internacional. Todos os direitos
               reservados.
             </span>
             <span>CNPJ: 85.557.385/0001-45</span>

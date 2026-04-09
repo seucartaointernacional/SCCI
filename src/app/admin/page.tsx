@@ -38,7 +38,7 @@ export default function AdminDashboardPage() {
   if (!stats) {
     return (
       <div className="flex items-center justify-center py-20">
-        <p className="text-red-500">Erro ao carregar estatisticas</p>
+        <p className="text-red-500">Erro ao carregar estatísticas</p>
       </div>
     );
   }

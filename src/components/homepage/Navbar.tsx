@@ -6,9 +6,9 @@ import { MenuIcon, XIcon } from "@/components/icons";
 
 const navLinks = [
   { label: "Como Funciona", href: "#como-funciona" },
-  { label: "Beneficios", href: "#beneficios" },
+  { label: "Benefícios", href: "#beneficios" },
   { label: "Depoimentos", href: "#depoimentos" },
-  { label: "Duvidas", href: "#duvidas" },
+  { label: "Dúvidas", href: "#duvidas" },
 ];
 
 export default function Navbar() {
@@ -44,7 +44,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <span className="text-lg font-bold text-gray-900 tracking-tight">
-            Seu Cartao{" "}
+            Seu Cartão{" "}
             <span className="text-brand-600">Internacional</span>
           </span>
         </Link>
@@ -67,7 +67,7 @@ export default function Navbar() {
           href="/solicitar"
           className="hidden md:inline-flex btn-primary text-sm py-2.5 px-6"
         >
-          Solicitar Cartao
+          Solicitar Cartão
         </Link>
 
         {/* Mobile hamburger */}
@@ -123,7 +123,7 @@ export default function Navbar() {
                 className="btn-primary w-full text-sm py-3"
                 onClick={() => setMobileOpen(false)}
               >
-                Solicitar Cartao
+                Solicitar Cartão
               </Link>
             </div>
           </div>

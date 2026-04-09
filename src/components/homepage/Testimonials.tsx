@@ -6,24 +6,24 @@ import { StarIcon } from "@/components/icons";
 const testimonials = [
   {
     name: "Maria S.",
-    location: "Sao Paulo, SP",
+    location: "São Paulo, SP",
     initials: "MS",
     quote:
-      "Recebi meu cartao em 25 dias. O processo foi rapido e transparente, sem nenhuma surpresa. Ja usei pra comprar em sites internacionais e funcionou perfeitamente.",
+      "Recebi meu cartão em 25 dias. O processo foi rápido e transparente, sem nenhuma surpresa. Já usei pra comprar em sites internacionais e funcionou perfeitamente.",
   },
   {
     name: "Carlos R.",
     location: "Belo Horizonte, MG",
     initials: "CR",
     quote:
-      "Estava com o nome negativado e achei que nao conseguiria. Fiz a solicitacao sem muita esperanca e fui aprovado. Cartao chegou certinho no prazo.",
+      "Estava com o nome negativado e achei que não conseguiria. Fiz a solicitação sem muita esperança e fui aprovado. Cartão chegou certinho no prazo.",
   },
   {
     name: "Ana L.",
     location: "Recife, PE",
     initials: "AL",
     quote:
-      "Precisava de um cartao internacional pra uma viagem e consegui o meu em menos de um mes. Atendimento serio e processo bem organizado.",
+      "Precisava de um cartão internacional pra uma viagem e consegui o meu em menos de um mês. Atendimento sério e processo bem organizado.",
   },
 ];
 

@@ -169,10 +169,10 @@ export default function LeadForm() {
         </div>
       </div>
 
-      {/* Endereco */}
+      {/* Endereço */}
       <div>
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-          Endereco
+          Endereço
         </p>
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -304,7 +304,7 @@ export default function LeadForm() {
 
       <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
         <LockIcon size={14} />
-        <span>Seus dados estao protegidos e nao serao compartilhados</span>
+        <span>Seus dados estão protegidos e não serão compartilhados</span>
       </div>
     </motion.form>
   );

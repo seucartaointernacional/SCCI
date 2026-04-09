@@ -23,7 +23,7 @@ export default function FlowHeader({ showBack = true, backHref = "/" }: FlowHead
           )}
           <Link href="/" className="flex items-center gap-2">
             <span className="text-lg font-bold text-gray-900 tracking-tight">
-              Seu Cartao{" "}
+              Seu Cartão{" "}
               <span className="text-brand-600">Internacional</span>
             </span>
           </Link>

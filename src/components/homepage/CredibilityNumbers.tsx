@@ -1,8 +1,8 @@
 export default function CredibilityNumbers() {
   const metrics = [
-    { value: "+5.000", label: "cartoes emitidos" },
-    { value: "98%", label: "de aprovacao" },
-    { value: "4.8/5.0", label: "avaliacao dos clientes" },
+    { value: "+5.000", label: "cartões emitidos" },
+    { value: "98%", label: "de aprovação" },
+    { value: "4.8/5.0", label: "avaliação dos clientes" },
     { value: "27 estados", label: "do Brasil" },
   ];
 

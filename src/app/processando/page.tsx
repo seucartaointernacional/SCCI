@@ -24,7 +24,7 @@ const STEPS = [
 
 const STEP_DURATION = 3000; // ~3s per step, ~9s total
 
-const PROGRESS_LABELS = ["Dados", "Analise", "Proposta", "Pagamento", "Confirmacao"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
 
 export default function ProcessandoPage() {
   const router = useRouter();
@@ -102,7 +102,7 @@ export default function ProcessandoPage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              Estamos finalizando tudo para voce
+              Estamos finalizando tudo para você
             </motion.p>
           </div>
 
@@ -183,7 +183,7 @@ export default function ProcessandoPage() {
 
           {/* Bottom text */}
           <p className="text-xs text-gray-400 text-center mt-6">
-            Preparando tudo para a sua melhor experiencia
+            Preparando tudo para a sua melhor experiência
           </p>
         </motion.div>
       </main>

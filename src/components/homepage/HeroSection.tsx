@@ -37,21 +37,21 @@ export default function HeroSection() {
             variants={fadeUpVariants}
             className="text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 leading-tight"
           >
-            Seu cartao de credito internacional, sem burocracia e sem complicacao
+            Seu cartão de crédito internacional, sem burocracia e sem complicação
           </motion.h1>
 
           <motion.p
             variants={fadeUpVariants}
             className="text-lg text-gray-500 leading-relaxed"
           >
-            Conectamos voce as melhores ofertas de cartoes internacionais de
+            Conectamos você às melhores ofertas de cartões internacionais de
             bancos parceiros. Processo 100% online, resposta em minutos e
             entrega em todo o Brasil.
           </motion.p>
 
           <motion.div variants={fadeUpVariants}>
             <Link href="/solicitar" className="btn-primary text-base py-4 px-8">
-              Solicitar meu cartao
+              Solicitar meu cartão
               <ArrowRightIcon size={18} />
             </Link>
           </motion.div>
@@ -62,7 +62,7 @@ export default function HeroSection() {
           >
             <ShieldCheckIcon size={16} />
             <span className="text-sm">
-              Seus dados estao protegidos com criptografia de ponta a ponta
+              Seus dados estão protegidos com criptografia de ponta a ponta
             </span>
           </motion.div>
         </motion.div>

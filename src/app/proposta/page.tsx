@@ -13,7 +13,7 @@ import { ClockIcon } from "@/components/icons";
 
 type View = "loading" | "proposal" | "recusa";
 
-const PROGRESS_LABELS = ["Dados", "Analise", "Proposta", "Pagamento", "Confirmacao"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
 
 export default function PropostaPage() {
   const router = useRouter();
@@ -128,7 +128,7 @@ export default function PropostaPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  Conseguimos uma proposta para voce!
+                  Conseguimos uma proposta para você!
                 </motion.h1>
                 <motion.p
                   className="text-gray-500 text-sm"
@@ -136,7 +136,7 @@ export default function PropostaPage() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  Confira os detalhes do seu cartao internacional
+                  Confira os detalhes do seu cartão internacional
                 </motion.p>
               </div>
 
@@ -202,7 +202,7 @@ export default function PropostaPage() {
               >
                 <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 rounded-full px-3 py-1">
                   <ClockIcon size={14} />
-                  <span>Proposta valida por 24h</span>
+                  <span>Proposta válida por 24h</span>
                 </div>
               </motion.div>
 
@@ -225,7 +225,7 @@ export default function PropostaPage() {
                   disabled={declining}
                   className="w-full py-2.5 text-sm text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-60"
                 >
-                  {declining ? "Processando..." : "Deixar para proxima"}
+                  {declining ? "Processando..." : "Deixar para próxima"}
                 </button>
               </motion.div>
             </motion.div>
@@ -276,7 +276,7 @@ export default function PropostaPage() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                Nao temos mais propostas para voce neste momento.
+                Não temos mais propostas para você neste momento.
               </motion.p>
 
               <motion.div

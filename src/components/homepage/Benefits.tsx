@@ -13,25 +13,25 @@ import {
 const benefits = [
   {
     icon: GlobeIcon,
-    title: "Aceito em mais de 150 paises",
+    title: "Aceito em mais de 150 países",
     description:
-      "Use seu cartao para compras online e presenciais em qualquer estabelecimento que aceite as principais bandeiras.",
+      "Use seu cartão para compras online e presenciais em qualquer estabelecimento que aceite as principais bandeiras.",
   },
   {
     icon: DollarSignIcon,
-    title: "Compras em dolar, euro e libra",
+    title: "Compras em dólar, euro e libra",
     description:
-      "Pague em moeda estrangeira direto no cartao, sem precisar abrir conta no exterior.",
+      "Pague em moeda estrangeira direto no cartão, sem precisar abrir conta no exterior.",
   },
   {
     icon: CalendarIcon,
     title: "Sem anuidade no primeiro ano",
     description:
-      "Comece a usar sem custo de manutencao. Sem surpresas na fatura.",
+      "Comece a usar sem custo de manutenção. Sem surpresas na fatura.",
   },
   {
     icon: ClockIcon,
-    title: "Aprovacao em minutos",
+    title: "Aprovação em minutos",
     description:
       "Nada de esperar dias por uma resposta. Nosso sistema analisa seu perfil e retorna uma proposta na hora.",
   },
@@ -39,13 +39,13 @@ const benefits = [
     icon: TruckIcon,
     title: "Entrega em todo o Brasil",
     description:
-      "De capitais a cidades do interior, seu cartao chega no endereco que voce informar.",
+      "De capitais a cidades do interior, seu cartão chega no endereço que você informar.",
   },
   {
     icon: ShieldCheckIcon,
-    title: "Negativado tambem pode solicitar",
+    title: "Negativado também pode solicitar",
     description:
-      "Seu nome no SPC ou Serasa nao impede a solicitacao. Analisamos seu perfil de forma independente.",
+      "Seu nome no SPC ou Serasa não impede a solicitação. Analisamos seu perfil de forma independente.",
   },
 ];
 
@@ -68,7 +68,7 @@ export default function Benefits() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <h2 className="section-title">
-            Por que escolher o Seu Cartao Internacional
+            Por que escolher o Seu Cartão Internacional
           </h2>
           <p className="section-subtitle mx-auto">
             Vantagens pensadas para quem quer praticidade e acesso ao mercado

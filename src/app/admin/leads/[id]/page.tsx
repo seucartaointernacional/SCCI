@@ -78,14 +78,14 @@ export default function AdminLeadDetailPage() {
         setResendMessage(data.error || "Erro ao reenviar e-mail");
       }
     } catch {
-      setResendMessage("Erro de conexao");
+      setResendMessage("Erro de conexão");
     } finally {
       setResending(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!confirm("Tem certeza que deseja excluir este lead? Esta acao nao pode ser desfeita.")) {
+    if (!confirm("Tem certeza que deseja excluir este lead? Esta ação não pode ser desfeita.")) {
       return;
     }
 
@@ -102,7 +102,7 @@ export default function AdminLeadDetailPage() {
         alert(data.error || "Erro ao excluir lead");
       }
     } catch {
-      alert("Erro de conexao");
+      alert("Erro de conexão");
     } finally {
       setDeleting(false);
     }
@@ -131,7 +131,7 @@ export default function AdminLeadDetailPage() {
   if (!lead) {
     return (
       <div className="flex items-center justify-center py-20">
-        <p className="text-red-500">Lead nao encontrado</p>
+        <p className="text-red-500">Lead não encontrado</p>
       </div>
     );
   }
@@ -215,7 +215,7 @@ export default function AdminLeadDetailPage() {
             </div>
             <div>
               <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Negativado</p>
-              <p className="text-sm font-semibold text-gray-900">{lead.negativado ? "Sim" : "Nao"}</p>
+              <p className="text-sm font-semibold text-gray-900">{lead.negativado ? "Sim" : "Não"}</p>
             </div>
             <div className="sm:col-span-2">
               <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Data de Cadastro</p>
@@ -234,7 +234,7 @@ export default function AdminLeadDetailPage() {
             {proposal ? (
               <div className="space-y-3">
                 <div>
-                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Cartao</p>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Cartão</p>
                   <p className="text-sm font-semibold text-gray-900">{proposal.card.nome}</p>
                 </div>
                 <div>

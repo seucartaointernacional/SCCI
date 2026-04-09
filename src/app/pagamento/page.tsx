@@ -16,7 +16,7 @@ const PIX_PAYLOAD =
 
 const TIMER_SECONDS = 30 * 60; // 30 minutes
 
-const PROGRESS_LABELS = ["Dados", "Analise", "Proposta", "Pagamento", "Confirmacao"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
 
 export default function PagamentoPage() {
   const router = useRouter();
@@ -118,7 +118,7 @@ export default function PagamentoPage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              Escaneie o QR Code ou copie o codigo PIX
+              Escaneie o QR Code ou copie o código PIX
             </motion.p>
           </div>
 
@@ -145,7 +145,7 @@ export default function PagamentoPage() {
               {formatBRL(TAXA_IMPORTACAO)}
             </p>
             <p className="text-sm text-gray-500 mt-1">
-              Importacao + Frete
+              Importação + Frete
             </p>
           </motion.div>
 
@@ -168,7 +168,7 @@ export default function PagamentoPage() {
               ) : (
                 <>
                   <CopyIcon size={18} />
-                  Copiar codigo PIX
+                  Copiar código PIX
                 </>
               )}
             </button>

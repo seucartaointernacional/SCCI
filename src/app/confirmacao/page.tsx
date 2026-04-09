@@ -30,7 +30,7 @@ function formatDateBR(date: Date): string {
   });
 }
 
-const PROGRESS_LABELS = ["Dados", "Analise", "Proposta", "Pagamento", "Confirmacao"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
 
 export default function ConfirmacaoPage() {
   const router = useRouter();
@@ -93,7 +93,7 @@ export default function ConfirmacaoPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.4 }}
           >
-            Seu cartao esta a caminho
+            Seu cartão está a caminho
           </motion.p>
 
           {/* Delivery box */}
@@ -110,7 +110,7 @@ export default function ConfirmacaoPage() {
               </span>
             </div>
             <p className="text-lg font-bold text-gray-900 ml-8">
-              22 a 36 dias uteis
+              22 a 36 dias úteis
             </p>
             <p className="text-xs text-gray-400 ml-8 mt-1">
               Entre {dateMin} e {dateMax}
@@ -128,7 +128,7 @@ export default function ConfirmacaoPage() {
               <MailIcon size={20} className="text-brand-600 flex-shrink-0" />
               <div>
                 <span className="text-sm text-brand-700 block">
-                  Confirmacao enviada por e-mail
+                  Confirmação enviada por e-mail
                 </span>
                 {proposalData?.lead?.email && (
                   <span className="text-xs text-brand-500">
@@ -146,7 +146,7 @@ export default function ConfirmacaoPage() {
             transition={{ delay: 1.4, duration: 0.4 }}
           >
             <button onClick={handleBackHome} className="btn-secondary w-full">
-              Voltar ao Inicio
+              Voltar ao Início
             </button>
           </motion.div>
         </div>

@@ -9,21 +9,21 @@ const steps = [
     icon: ClipboardIcon,
     title: "Preencha seus dados",
     description:
-      "Informe seus dados pessoais e financeiros no nosso formulario rapido e seguro.",
+      "Informe seus dados pessoais e financeiros no nosso formulário rápido e seguro.",
   },
   {
     number: "2",
     icon: CreditCardIcon,
     title: "Receba sua proposta",
     description:
-      "Nosso sistema analisa seu perfil e apresenta a melhor oferta de cartao internacional para voce.",
+      "Nosso sistema analisa seu perfil e apresenta a melhor oferta de cartão internacional para você.",
   },
   {
     number: "3",
     icon: TruckIcon,
-    title: "Cartao na sua porta",
+    title: "Cartão na sua porta",
     description:
-      "Apos a confirmacao, seu cartao e enviado para o endereco informado em todo o Brasil.",
+      "Após a confirmação, seu cartão é enviado para o endereço informado em todo o Brasil.",
   },
 ];
 
@@ -47,7 +47,7 @@ export default function HowItWorks() {
         <div className="text-center mb-14">
           <h2 className="section-title">Como funciona</h2>
           <p className="section-subtitle mx-auto">
-            Tres passos simples para ter seu cartao internacional em maos
+            Três passos simples para ter seu cartão internacional em mãos
           </p>
         </div>
 

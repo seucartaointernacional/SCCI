@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
 
       router.push("/admin");
     } catch {
-      setError("Erro de conexao. Tente novamente.");
+      setError("Erro de conexão. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
       <div className="max-w-sm w-full card-container">
         <div className="text-center">
           <h1 className="text-xl font-bold text-gray-900">
-            Seu Cartao Internacional
+            Seu Cartão Internacional
           </h1>
           <p className="text-sm text-gray-400 mt-1">Painel Administrativo</p>
         </div>
@@ -52,7 +52,7 @@ export default function AdminLoginPage() {
               htmlFor="username"
               className="block text-sm font-medium text-gray-700 mb-1.5"
             >
-              Usuario
+              Usuário
             </label>
             <input
               id="username"
@@ -61,7 +61,7 @@ export default function AdminLoginPage() {
               onChange={(e) => setUsername(e.target.value)}
               required
               className="input-field"
-              placeholder="Digite seu usuario"
+              placeholder="Digite seu usuário"
             />
           </div>
 

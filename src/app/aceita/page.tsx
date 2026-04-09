@@ -11,12 +11,12 @@ import FlowProgress from "@/components/FlowProgress";
 import { CheckCircleIcon } from "@/components/icons";
 
 const NEXT_STEPS = [
-  "Apresente um documento com foto ao receber o cartao",
-  "Envie uma foto com o documento para ativacao",
-  "Cartao pronto para uso imediato apos ativacao",
+  "Apresente um documento com foto ao receber o cartão",
+  "Envie uma foto com o documento para ativação",
+  "Cartão pronto para uso imediato após ativação",
 ];
 
-const PROGRESS_LABELS = ["Dados", "Analise", "Proposta", "Pagamento", "Confirmacao"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
 
 export default function AceitaPage() {
   const router = useRouter();
@@ -72,7 +72,7 @@ export default function AceitaPage() {
             transition={{ delay: 0.5, duration: 0.4 }}
           >
             <p className="text-sm text-gray-500 mb-1">
-              Taxa unica de importacao e envio
+              Taxa única de importação e envio
             </p>
             <p className="text-3xl font-bold text-brand-800">
               {formatBRL(TAXA_IMPORTACAO)}

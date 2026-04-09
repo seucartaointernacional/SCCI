@@ -20,16 +20,16 @@ import {
 const STEP_ICONS = [SearchIcon, ChartIcon, MapPinIcon, BuildingIcon, HandshakeIcon];
 
 const STEPS = [
-  "Verificando CPF junto aos orgaos competentes",
+  "Verificando CPF junto aos órgãos competentes",
   "Analisando renda e capacidade de pagamento",
-  "Verificando endereco e regiao de entrega",
+  "Verificando endereço e região de entrega",
   "Consultando bancos parceiros",
-  "Negociando as melhores condicoes",
+  "Negociando as melhores condições",
 ];
 
 const STEP_DURATION = 2800; // ~2.8s per step, ~14s total
 
-const PROGRESS_LABELS = ["Dados", "Analise", "Proposta", "Pagamento", "Confirmacao"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
 
 export default function AnalisePage() {
   const router = useRouter();
@@ -107,7 +107,7 @@ export default function AnalisePage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              Aguarde enquanto processamos sua solicitacao
+              Aguarde enquanto processamos sua solicitação
             </motion.p>
           </div>
 
@@ -188,7 +188,7 @@ export default function AnalisePage() {
 
           {/* Bottom text */}
           <p className="text-xs text-gray-400 text-center mt-6">
-            Conectando voce as melhores ofertas de nossos bancos parceiros
+            Conectando você às melhores ofertas de nossos bancos parceiros
           </p>
         </motion.div>
       </main>
