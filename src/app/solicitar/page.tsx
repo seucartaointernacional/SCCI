@@ -14,7 +14,7 @@ export default function SolicitarPage() {
       <FlowProgress
         currentStep={1}
         totalSteps={5}
-        labels={["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"]}
+        labels={["Dados", "Análise", "Proposta", "Etapa Final", "Confirmação"]}
       />
 
       <section className="px-4 pt-10 pb-4">

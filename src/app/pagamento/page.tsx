@@ -16,7 +16,7 @@ const PIX_PAYLOAD =
 
 const TIMER_SECONDS = 30 * 60; // 30 minutes
 
-const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Etapa Final", "Confirmação"];
 
 export default function PagamentoPage() {
   const router = useRouter();

@@ -2,7 +2,7 @@
 
 import { useState, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import FormInput from "@/components/ui/FormInput";
 import { formatCpfCnpj, formatPhone, formatCEP } from "@/lib/formatters";
 import { leadFormSchema } from "@/lib/validations";
@@ -14,13 +14,11 @@ const ESTADOS = [
   "PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO",
 ];
 
-const sectionVariants = {
-  hidden: { opacity: 0, y: 15 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, delay: 0.1 + i * 0.15 },
-  }),
+const fadeIn = {
+  initial: { opacity: 0, height: 0 },
+  animate: { opacity: 1, height: "auto" },
+  exit: { opacity: 0, height: 0 },
+  transition: { duration: 0.35 },
 };
 
 export default function LeadForm() {
@@ -43,6 +41,17 @@ export default function LeadForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Progressive reveal logic
+  const showCpfTel = form.nome.length >= 3;
+  const showEmail = showCpfTel && form.cpfCnpj.length >= 11;
+  const showEndereco = showEmail && form.email.includes("@");
+  const showFinanceiro = showEndereco && form.cep.length >= 8 && form.cidade.length >= 2 && form.estado.length > 0;
+  const showSubmit = showFinanceiro && Number(form.renda) > 0;
+
+  // Progress percentage
+  const steps = [true, showCpfTel, showEmail, showEndereco, showFinanceiro, showSubmit];
+  const progress = Math.round((steps.filter(Boolean).length / steps.length) * 100);
 
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value, type } = e.target;
@@ -118,7 +127,22 @@ export default function LeadForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Progress bar */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-xs text-gray-400">
+          <span>Progresso do cadastro</span>
+          <span className="font-semibold text-brand-600">{progress}%</span>
+        </div>
+        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-brand-600 rounded-full"
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.4 }}
+          />
+        </div>
+      </div>
+
       {serverError && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -129,179 +153,181 @@ export default function LeadForm() {
         </motion.div>
       )}
 
-      {/* Dados Pessoais */}
-      <motion.div custom={0} variants={sectionVariants} initial="hidden" animate="visible">
-        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
-          Dados Pessoais
-        </p>
-        <div className="space-y-4">
-          <FormInput
-            label="Nome completo"
-            name="nome"
-            value={form.nome}
-            onChange={handleChange}
-            placeholder="Seu nome completo"
-            error={errors.nome}
-          />
+      {/* Nome - sempre visível */}
+      <div>
+        <FormInput
+          label="Nome completo"
+          name="nome"
+          value={form.nome}
+          onChange={handleChange}
+          placeholder="Digite seu nome completo"
+          error={errors.nome}
+        />
+      </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* CPF + Telefone */}
+      <AnimatePresence>
+        {showCpfTel && (
+          <motion.div {...fadeIn} className="overflow-hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormInput
+                label="CPF ou CNPJ"
+                name="cpfCnpj"
+                value={form.cpfCnpj}
+                onChange={handleChange}
+                placeholder="000.000.000-00"
+                error={errors.cpfCnpj}
+              />
+              <FormInput
+                label="Telefone"
+                name="telefone"
+                value={form.telefone}
+                onChange={handleChange}
+                placeholder="(00) 00000-0000"
+                error={errors.telefone}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Email */}
+      <AnimatePresence>
+        {showEmail && (
+          <motion.div {...fadeIn} className="overflow-hidden">
             <FormInput
-              label="CPF ou CNPJ"
-              name="cpfCnpj"
-              value={form.cpfCnpj}
+              label="E-mail"
+              name="email"
+              type="email"
+              value={form.email}
               onChange={handleChange}
-              placeholder="000.000.000-00"
-              error={errors.cpfCnpj}
+              placeholder="seu@email.com"
+              error={errors.email}
             />
-
-            <FormInput
-              label="Telefone"
-              name="telefone"
-              value={form.telefone}
-              onChange={handleChange}
-              placeholder="(00) 00000-0000"
-              error={errors.telefone}
-            />
-          </div>
-
-          <FormInput
-            label="E-mail"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="seu@email.com"
-            error={errors.email}
-          />
-        </div>
-      </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Endereço */}
-      <motion.div custom={1} variants={sectionVariants} initial="hidden" animate="visible">
-        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
-          Endereço
-        </p>
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <FormInput
-              label="CEP"
-              name="cep"
-              value={form.cep}
-              onChange={handleChange}
-              placeholder="00000-000"
-              error={errors.cep}
-            />
-
-            <FormInput
-              label="Cidade"
-              name="cidade"
-              value={form.cidade}
-              onChange={handleChange}
-              placeholder="Sua cidade"
-              error={errors.cidade}
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="block text-sm font-semibold text-gray-700">
-              Estado
-            </label>
-            <select
-              name="estado"
-              value={form.estado}
-              onChange={handleChange}
-              className={`input-field ${errors.estado ? "!border-red-400 focus:!ring-red-400" : ""}`}
-            >
-              <option value="">Selecione...</option>
-              {ESTADOS.map((uf) => (
-                <option key={uf} value={uf}>
-                  {uf}
-                </option>
-              ))}
-            </select>
-            {errors.estado && <p className="text-sm text-red-500 mt-1">{errors.estado}</p>}
-          </div>
-        </div>
-      </motion.div>
+      <AnimatePresence>
+        {showEndereco && (
+          <motion.div {...fadeIn} className="overflow-hidden">
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 mt-2">
+              Endereço
+            </p>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormInput
+                  label="CEP"
+                  name="cep"
+                  value={form.cep}
+                  onChange={handleChange}
+                  placeholder="00000-000"
+                  error={errors.cep}
+                />
+                <FormInput
+                  label="Cidade"
+                  name="cidade"
+                  value={form.cidade}
+                  onChange={handleChange}
+                  placeholder="Sua cidade"
+                  error={errors.cidade}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="block text-sm font-semibold text-gray-700">
+                  Estado
+                </label>
+                <select
+                  name="estado"
+                  value={form.estado}
+                  onChange={handleChange}
+                  className={`input-field ${errors.estado ? "!border-red-400 focus:!ring-red-400" : ""}`}
+                >
+                  <option value="">Selecione...</option>
+                  {ESTADOS.map((uf) => (
+                    <option key={uf} value={uf}>{uf}</option>
+                  ))}
+                </select>
+                {errors.estado && <p className="text-sm text-red-500 mt-1">{errors.estado}</p>}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Dados Financeiros */}
-      <motion.div custom={2} variants={sectionVariants} initial="hidden" animate="visible">
-        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
-          Dados Financeiros
-        </p>
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <FormInput
-              label="Renda mensal (R$)"
-              name="renda"
-              type="number"
-              value={form.renda}
-              onChange={handleChange}
-              placeholder="5000"
-              min="0"
-              step="0.01"
-              error={errors.renda}
-            />
-
-            <FormInput
-              label="Limite desejado (R$)"
-              name="limiteDesejado"
-              type="number"
-              value={form.limiteDesejado}
-              onChange={handleChange}
-              placeholder="10000"
-              min="0"
-              step="0.01"
-              error={errors.limiteDesejado}
-            />
-          </div>
-        </div>
-      </motion.div>
+      <AnimatePresence>
+        {showFinanceiro && (
+          <motion.div {...fadeIn} className="overflow-hidden">
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 mt-2">
+              Dados Financeiros
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormInput
+                label="Renda mensal (R$)"
+                name="renda"
+                type="number"
+                value={form.renda}
+                onChange={handleChange}
+                placeholder="5000"
+                min="0"
+                step="0.01"
+                error={errors.renda}
+              />
+              <FormInput
+                label="Limite desejado (R$)"
+                name="limiteDesejado"
+                type="number"
+                value={form.limiteDesejado}
+                onChange={handleChange}
+                placeholder="10000"
+                min="0"
+                step="0.01"
+                error={errors.limiteDesejado}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Submit */}
-      <motion.div custom={3} variants={sectionVariants} initial="hidden" animate="visible">
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn-primary w-full py-4 text-base"
-        >
-          {loading ? (
-            <>
-              <svg
-                className="animate-spin h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
-              </svg>
-              Analisando...
-            </>
-          ) : (
-            <>
-              Verificar meu crédito
-              <ArrowRightIcon size={18} />
-            </>
-          )}
-        </button>
+      <AnimatePresence>
+        {showSubmit && (
+          <motion.div {...fadeIn} className="overflow-hidden pt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full py-4 text-base"
+            >
+              {loading ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Analisando...
+                </>
+              ) : (
+                <>
+                  Verificar meu crédito
+                  <ArrowRightIcon size={18} />
+                </>
+              )}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        <div className="flex items-center justify-center gap-2 text-xs text-gray-400 mt-4">
-          <LockIcon size={14} />
-          <span>Seus dados estão protegidos e não serão compartilhados</span>
-        </div>
-      </motion.div>
+      <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
+        <LockIcon size={14} />
+        <span>Seus dados estão protegidos e não serão compartilhados</span>
+      </div>
     </form>
   );
 }

@@ -13,7 +13,7 @@ import { ClockIcon } from "@/components/icons";
 
 type View = "loading" | "proposal" | "recusa";
 
-const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Etapa Final", "Confirmação"];
 
 export default function PropostaPage() {
   const router = useRouter();

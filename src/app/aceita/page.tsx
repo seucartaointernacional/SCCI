@@ -16,7 +16,7 @@ const NEXT_STEPS = [
   "Cartão pronto para uso imediato após ativação",
 ];
 
-const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Etapa Final", "Confirmação"];
 
 export default function AceitaPage() {
   const router = useRouter();

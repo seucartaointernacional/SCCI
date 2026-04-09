@@ -29,7 +29,7 @@ const STEPS = [
 
 const STEP_DURATION = 2800; // ~2.8s per step, ~14s total
 
-const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Etapa Final", "Confirmação"];
 
 export default function AnalisePage() {
   const router = useRouter();

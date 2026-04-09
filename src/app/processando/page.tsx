@@ -24,7 +24,7 @@ const STEPS = [
 
 const STEP_DURATION = 3000; // ~3s per step, ~9s total
 
-const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Etapa Final", "Confirmação"];
 
 export default function ProcessandoPage() {
   const router = useRouter();

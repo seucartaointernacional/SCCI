@@ -30,7 +30,7 @@ function formatDateBR(date: Date): string {
   });
 }
 
-const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"];
+const PROGRESS_LABELS = ["Dados", "Análise", "Proposta", "Etapa Final", "Confirmação"];
 
 export default function ConfirmacaoPage() {
   const router = useRouter();
