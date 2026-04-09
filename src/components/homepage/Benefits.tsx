@@ -25,9 +25,9 @@ const benefits = [
   },
   {
     icon: CalendarIcon,
-    title: "Sem anuidade no primeiro ano",
+    title: "Custo zero de manutenção",
     description:
-      "Comece a usar sem custo de manutenção. Sem surpresas na fatura.",
+      "Sem anuidade, sem taxa de manutenção e sem cobranças extras. O cartão não tem nenhum custo recorrente.",
   },
   {
     icon: ClockIcon,

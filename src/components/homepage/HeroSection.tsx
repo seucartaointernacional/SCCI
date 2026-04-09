@@ -41,6 +41,7 @@ export default function HeroSection() {
             <p className="text-lg text-gray-300 leading-relaxed max-w-lg">
               Aprovado por bancos internacionais, funciona como qualquer cartão
               brasileiro. Use em real, dólar, euro ou qualquer moeda do mundo.
+              Sem anuidade e sem cobranças extras.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 pt-1">

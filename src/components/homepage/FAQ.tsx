@@ -21,6 +21,11 @@ const faqs = [
       "Não. Mesmo com restrições no SPC ou Serasa, você pode fazer a solicitação. A análise é feita de forma independente com base no seu perfil completo.",
   },
   {
+    question: "O cartão tem anuidade ou custos de manutenção?",
+    answer:
+      "Não. O cartão tem custo zero de manutenção: sem anuidade, sem taxa mensal e sem cobranças extras. Você só paga pelo que usar.",
+  },
+  {
     question: "Quanto tempo leva para receber o cartão?",
     answer:
       "O prazo de entrega é de 22 a 36 dias úteis após a confirmação, dependendo da sua região.",

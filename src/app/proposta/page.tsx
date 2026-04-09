@@ -136,7 +136,7 @@ export default function PropostaPage() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  Confira os detalhes do seu cartão internacional
+                  Confira os detalhes do seu cartão internacional — sem anuidade e sem cobranças extras
                 </motion.p>
               </div>
 
