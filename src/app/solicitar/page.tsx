@@ -3,10 +3,9 @@ import FlowFooter from "@/components/FlowFooter";
 import FlowProgress from "@/components/FlowProgress";
 import LeadForm from "@/components/LeadForm";
 
-
 export default function SolicitarPage() {
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-100">
       <FlowHeader />
       <FlowProgress
         currentStep={1}

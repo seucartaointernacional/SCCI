@@ -5,55 +5,36 @@ import { ClipboardIcon, CreditCardIcon, TruckIcon } from "@/components/icons";
 
 const steps = [
   {
-    number: "01",
+    number: "1",
     icon: ClipboardIcon,
     title: "Preencha seus dados",
     description:
-      "Informe seus dados pessoais e financeiros no nosso formulário rápido e seguro. Leva menos de 2 minutos.",
-    color: "from-brand-500 to-brand-600",
-    bg: "bg-brand-50",
+      "Informe seus dados pessoais e financeiros. O formulário leva menos de 2 minutos.",
   },
   {
-    number: "02",
+    number: "2",
     icon: CreditCardIcon,
     title: "Receba sua proposta",
     description:
-      "Nosso sistema analisa seu perfil e apresenta a melhor oferta de cartão internacional para você.",
-    color: "from-emerald-500 to-emerald-600",
-    bg: "bg-emerald-50",
+      "Analisamos seu perfil e apresentamos a melhor oferta de cartão internacional disponível.",
   },
   {
-    number: "03",
+    number: "3",
     icon: TruckIcon,
-    title: "Cartão na sua porta",
+    title: "Receba em casa",
     description:
       "Após a confirmação, seu cartão é enviado para o endereço informado em todo o Brasil.",
-    color: "from-violet-500 to-violet-600",
-    bg: "bg-violet-50",
   },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1] as const,
-      delay: i * 0.15,
-    },
-  }),
-};
-
 export default function HowItWorks() {
   return (
-    <section id="como-funciona" className="py-24 px-4">
+    <section id="como-funciona" className="py-20 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-14">
           <h2 className="section-title">Como funciona</h2>
           <p className="section-subtitle mx-auto">
-            Três passos simples para ter seu cartão internacional em mãos
+            Três passos simples para ter seu cartão internacional
           </p>
         </div>
 
@@ -63,24 +44,19 @@ export default function HowItWorks() {
             return (
               <motion.div
                 key={i}
-                custom={i}
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-50px" }}
-                className="relative bg-white rounded-2xl p-8 shadow-lg shadow-gray-100/80 border border-gray-100 group hover:shadow-xl hover:shadow-gray-200/60 transition-all duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.4 }}
+                className="text-center p-8 rounded-2xl border border-gray-200 bg-white"
               >
-                {/* Step number */}
-                <span className="text-5xl font-extrabold text-gray-100 absolute top-4 right-6 select-none group-hover:text-brand-50 transition-colors duration-300">
-                  {step.number}
-                </span>
-
-                {/* Icon */}
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-5 shadow-md`}>
-                  <IconComponent size={24} className="text-white" />
+                <div className="w-14 h-14 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center mx-auto mb-5">
+                  <IconComponent size={24} />
                 </div>
-
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-600 text-white text-sm font-bold mb-4">
+                  {step.number}
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
                   {step.title}
                 </h3>
                 <p className="text-gray-500 text-sm leading-relaxed">
