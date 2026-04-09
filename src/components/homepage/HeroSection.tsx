@@ -51,18 +51,16 @@ export default function HeroSection() {
               variants={fadeUpVariants}
               className="text-4xl lg:text-[3.25rem] font-extrabold tracking-tight text-gray-900 leading-[1.15]"
             >
-              Seu cartão de crédito{" "}
-              <span className="text-brand-600">internacional</span>, sem
-              burocracia
+              Cartão de crédito internacional{" "}
+              <span className="text-brand-600">aprovado</span> mesmo com nome negativado
             </motion.h1>
 
             <motion.p
               variants={fadeUpVariants}
               className="text-lg text-gray-500 leading-relaxed max-w-lg"
             >
-              Conectamos você às melhores ofertas de cartões internacionais de
-              bancos parceiros. Processo 100% online, resposta em minutos e
-              entrega em todo o Brasil.
+              Processo 100% online, resposta em minutos e entrega em todo o
+              Brasil. Sem consulta ao SPC/Serasa.
             </motion.p>
 
             <motion.div variants={fadeUpVariants} className="flex flex-col sm:flex-row gap-3">
