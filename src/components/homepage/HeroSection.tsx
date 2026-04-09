@@ -22,27 +22,27 @@ const floatingBadges = [
 export default function HeroSection() {
   return (
     <section className="bg-white border-b border-gray-200">
-      <div className="max-w-6xl mx-auto px-4 py-16 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="max-w-6xl mx-auto px-4 py-10 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left column */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-4 lg:gap-6"
           >
-            <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-900 leading-[1.15]">
+            <h1 className="text-3xl lg:text-5xl font-extrabold tracking-tight text-gray-900 leading-[1.15]">
               Cartão de crédito internacional{" "}
               <span className="text-brand-600">mesmo com nome negativado</span>
             </h1>
 
-            <p className="text-lg text-gray-500 leading-relaxed max-w-lg">
+            <p className="text-base lg:text-lg text-gray-500 leading-relaxed">
               Aprovado por bancos internacionais, funciona como qualquer cartão
               brasileiro. Use em real, dólar, euro ou qualquer moeda do mundo.
             </p>
 
-            {/* Destaques com ícones */}
-            <div className="flex flex-wrap gap-3">
+            {/* Destaques - só desktop */}
+            <div className="hidden lg:flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">
                 <DollarSignIcon size={18} className="text-emerald-600 shrink-0" />
                 <span className="text-sm font-bold text-emerald-800">Sem anuidade</span>
@@ -57,7 +57,8 @@ export default function HeroSection() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            {/* CTA */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-1">
               <Link
                 href="/solicitar"
                 className="btn-primary text-base py-4 px-8"
@@ -74,21 +75,21 @@ export default function HeroSection() {
             </div>
 
             {/* Trust signals */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-400">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs lg:text-sm text-gray-400">
               <div className="flex items-center gap-1.5">
-                <ShieldCheckIcon size={15} className="text-emerald-500" />
+                <ShieldCheckIcon size={14} className="text-emerald-500" />
                 <span>Dados protegidos</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircleIcon size={15} className="text-emerald-500" />
+                <CheckCircleIcon size={14} className="text-emerald-500" />
                 <span>+5.000 cartões emitidos</span>
               </div>
-              <span className="text-gray-300">|</span>
+              <span className="text-gray-300 hidden sm:inline">|</span>
               <span>CNPJ 85.557.385/0001-45</span>
             </div>
           </motion.div>
 
-          {/* Right column - Card with floating glass badges */}
+          {/* Desktop: Card with floating glass badges */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -96,7 +97,6 @@ export default function HeroSection() {
             className="hidden lg:flex items-center justify-center"
           >
             <div className="relative" style={{ width: 420, height: 420 }}>
-              {/* Card centered */}
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px]">
                 <CreditCard
                   nome="Cartão Internacional"
@@ -108,7 +108,6 @@ export default function HeroSection() {
                 />
               </div>
 
-              {/* Floating glassmorphism badges */}
               {floatingBadges.map((badge, i) => (
                 <motion.div
                   key={badge.label}
@@ -129,14 +128,14 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Mobile: Card + badges stacked */}
+          {/* Mobile: Card compact + badges inline */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="lg:hidden flex flex-col items-center gap-6"
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="lg:hidden"
           >
-            <div className="w-full max-w-sm">
+            <div className="w-full max-w-xs mx-auto mb-5">
               <CreditCard
                 nome="Cartão Internacional"
                 bandeira="visa"
@@ -146,17 +145,15 @@ export default function HeroSection() {
                 holderName="SEU NOME AQUI"
               />
             </div>
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-1.5">
               {floatingBadges.map((badge) => (
-                <div
+                <span
                   key={badge.label}
-                  className="bg-gray-100 border border-gray-200 rounded-full px-3 py-1.5 flex items-center gap-1.5"
+                  className="bg-gray-100 text-gray-700 rounded-full px-3 py-1 text-[11px] font-semibold flex items-center gap-1"
                 >
-                  <CheckCircleIcon size={12} className="text-emerald-500 shrink-0" />
-                  <span className="text-xs font-semibold text-gray-700 whitespace-nowrap">
-                    {badge.label}
-                  </span>
-                </div>
+                  <CheckCircleIcon size={11} className="text-emerald-500 shrink-0" />
+                  {badge.label}
+                </span>
               ))}
             </div>
           </motion.div>
