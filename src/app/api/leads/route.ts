@@ -102,7 +102,8 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error creating lead:", error);
+    console.error("Error creating lead:", error instanceof Error ? error.message : error);
+    console.error("Stack:", error instanceof Error ? error.stack : "no stack");
     return NextResponse.json(
       { error: "Erro interno do servidor" },
       { status: 500 }
