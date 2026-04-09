@@ -18,7 +18,10 @@ export default function HeroSection() {
             className="flex flex-col gap-6"
           >
             <h1 className="text-3xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-              Cartão de crédito internacional aprovado mesmo com nome negativado
+              Cartão de crédito internacional aprovado{" "}
+              <span className="bg-emerald-500 text-white px-3 py-1 rounded-lg inline-block mt-1">
+                mesmo com nome negativado
+              </span>
             </h1>
 
             <p className="text-lg text-brand-200 leading-relaxed max-w-lg">
