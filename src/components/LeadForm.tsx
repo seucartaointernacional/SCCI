@@ -14,6 +14,15 @@ const ESTADOS = [
   "PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO",
 ];
 
+const sectionVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, delay: 0.1 + i * 0.15 },
+  }),
+};
+
 export default function LeadForm() {
   const router = useRouter();
   const { setLeadId, setProposalId } = useFlowStore();
@@ -109,22 +118,20 @@ export default function LeadForm() {
   }
 
   return (
-    <motion.form
-      onSubmit={handleSubmit}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="space-y-6"
-    >
+    <form onSubmit={handleSubmit} className="space-y-6">
       {serverError && (
-        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm"
+        >
           {serverError}
-        </div>
+        </motion.div>
       )}
 
       {/* Dados Pessoais */}
-      <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+      <motion.div custom={0} variants={sectionVariants} initial="hidden" animate="visible">
+        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
           Dados Pessoais
         </p>
         <div className="space-y-4">
@@ -133,7 +140,7 @@ export default function LeadForm() {
             name="nome"
             value={form.nome}
             onChange={handleChange}
-            placeholder="Seu nome"
+            placeholder="Seu nome completo"
             error={errors.nome}
           />
 
@@ -167,11 +174,11 @@ export default function LeadForm() {
             error={errors.email}
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* Endereço */}
-      <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+      <motion.div custom={1} variants={sectionVariants} initial="hidden" animate="visible">
+        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
           Endereço
         </p>
         <div className="space-y-4">
@@ -196,14 +203,14 @@ export default function LeadForm() {
           </div>
 
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700">
               Estado
             </label>
             <select
               name="estado"
               value={form.estado}
               onChange={handleChange}
-              className={`input-field ${errors.estado ? "border-red-400 focus:ring-red-400" : ""}`}
+              className={`input-field ${errors.estado ? "!border-red-400 focus:!ring-red-400" : ""}`}
             >
               <option value="">Selecione...</option>
               {ESTADOS.map((uf) => (
@@ -212,14 +219,14 @@ export default function LeadForm() {
                 </option>
               ))}
             </select>
-            {errors.estado && <p className="text-sm text-red-500">{errors.estado}</p>}
+            {errors.estado && <p className="text-sm text-red-500 mt-1">{errors.estado}</p>}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Dados Financeiros */}
-      <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+      <motion.div custom={2} variants={sectionVariants} initial="hidden" animate="visible">
+        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
           Dados Financeiros
         </p>
         <div className="space-y-4">
@@ -248,64 +255,53 @@ export default function LeadForm() {
               error={errors.limiteDesejado}
             />
           </div>
-
-          <div className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              id="negativado"
-              name="negativado"
-              checked={form.negativado}
-              onChange={handleChange}
-              className="w-4 h-4 text-brand-600 border-gray-300 rounded focus:ring-brand-500"
-            />
-            <label htmlFor="negativado" className="text-sm text-gray-700">
-              Estou com nome negativado
-            </label>
-          </div>
         </div>
-      </div>
+      </motion.div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-      >
-        {loading ? (
-          <>
-            <svg
-              className="animate-spin h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-              />
-            </svg>
-            Enviando...
-          </>
-        ) : (
-          <>
-            Solicitar Proposta
-            <ArrowRightIcon size={18} />
-          </>
-        )}
-      </button>
+      {/* Submit */}
+      <motion.div custom={3} variants={sectionVariants} initial="hidden" animate="visible">
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn-primary w-full py-4 text-base"
+        >
+          {loading ? (
+            <>
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+              Analisando...
+            </>
+          ) : (
+            <>
+              Verificar meu crédito
+              <ArrowRightIcon size={18} />
+            </>
+          )}
+        </button>
 
-      <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
-        <LockIcon size={14} />
-        <span>Seus dados estão protegidos e não serão compartilhados</span>
-      </div>
-    </motion.form>
+        <div className="flex items-center justify-center gap-2 text-xs text-gray-400 mt-4">
+          <LockIcon size={14} />
+          <span>Seus dados estão protegidos e não serão compartilhados</span>
+        </div>
+      </motion.div>
+    </form>
   );
 }
