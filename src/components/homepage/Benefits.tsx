@@ -10,7 +10,21 @@ import {
   ShieldCheckIcon,
 } from "@/components/icons";
 
-const benefits = [
+interface Benefit {
+  icon: typeof GlobeIcon;
+  title: string;
+  description: string;
+  highlight?: boolean;
+}
+
+const benefits: Benefit[] = [
+  {
+    icon: ShieldCheckIcon,
+    title: "Negativado pode solicitar e tem grandes chances de aprovação",
+    description:
+      "Restrições no SPC ou Serasa não impedem a solicitação. A análise é feita de forma independente por bancos internacionais parceiros, com taxa de aprovação acima de 93%.",
+    highlight: true,
+  },
   {
     icon: GlobeIcon,
     title: "Aprovado por bancos internacionais",
@@ -41,12 +55,6 @@ const benefits = [
     description:
       "De capitais a cidades do interior, seu cartão chega no endereço informado.",
   },
-  {
-    icon: ShieldCheckIcon,
-    title: "Negativado pode solicitar",
-    description:
-      "Restrições no SPC ou Serasa não impedem a solicitação. Análise independente.",
-  },
 ];
 
 export default function Benefits() {
@@ -70,13 +78,24 @@ export default function Benefits() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, duration: 0.4 }}
-                className="bg-white rounded-xl p-6 border border-gray-200"
+                className={`rounded-xl p-6 border ${
+                  benefit.highlight
+                    ? "bg-brand-700 border-brand-700 col-span-1 md:col-span-2 lg:col-span-3"
+                    : "bg-white border-gray-200"
+                }`}
               >
-                <IconComponent size={24} className="text-brand-600 mb-4" />
-                <h3 className="text-base font-bold text-gray-900 mb-1.5">
+                <IconComponent
+                  size={24}
+                  className={`mb-4 ${benefit.highlight ? "text-emerald-400" : "text-brand-600"}`}
+                />
+                <h3 className={`font-bold mb-1.5 ${
+                  benefit.highlight ? "text-xl text-white" : "text-base text-gray-900"
+                }`}>
                   {benefit.title}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
+                <p className={`text-sm leading-relaxed ${
+                  benefit.highlight ? "text-brand-200" : "text-gray-500"
+                }`}>
                   {benefit.description}
                 </p>
               </motion.div>

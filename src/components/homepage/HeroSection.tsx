@@ -11,11 +11,19 @@ import {
 } from "@/components/icons";
 import CreditCard from "@/components/CreditCard";
 
+const floatingBadges = [
+  { label: "Aceita Negativados", x: "-10%", y: "5%" },
+  { label: "+93% de Aprovação", x: "75%", y: "-8%" },
+  { label: "Simulação Grátis", x: "-15%", y: "50%" },
+  { label: "Sem Anuidade", x: "80%", y: "55%" },
+  { label: "Compras Online e Presenciais", x: "15%", y: "95%" },
+];
+
 export default function HeroSection() {
   return (
     <section className="bg-white border-b border-gray-200">
       <div className="max-w-6xl mx-auto px-4 py-16 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left column */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -80,15 +88,55 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right column - Credit Card with badges */}
+          {/* Right column - Card with floating glass badges */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-col items-center gap-8"
+            className="hidden lg:flex items-center justify-center"
           >
-            {/* Card on gray background */}
-            <div className="bg-gray-100 rounded-2xl p-8 lg:p-10 w-full max-w-md">
+            <div className="relative" style={{ width: 420, height: 420 }}>
+              {/* Card centered */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px]">
+                <CreditCard
+                  nome="Cartão Internacional"
+                  bandeira="visa"
+                  corPrimaria="#0F172A"
+                  corSecundaria="#334155"
+                  corTexto="#ffffff"
+                  holderName="SEU NOME AQUI"
+                />
+              </div>
+
+              {/* Floating glassmorphism badges */}
+              {floatingBadges.map((badge, i) => (
+                <motion.div
+                  key={badge.label}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.8 + i * 0.15, duration: 0.4 }}
+                  className="absolute z-20"
+                  style={{ left: badge.x, top: badge.y }}
+                >
+                  <div className="bg-white/80 backdrop-blur-md border border-gray-200/80 shadow-lg rounded-full px-3.5 py-2 flex items-center gap-2">
+                    <CheckCircleIcon size={14} className="text-emerald-500 shrink-0" />
+                    <span className="text-xs font-semibold text-gray-800 whitespace-nowrap">
+                      {badge.label}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Mobile: Card + badges stacked */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="lg:hidden flex flex-col items-center gap-6"
+          >
+            <div className="w-full max-w-sm">
               <CreditCard
                 nome="Cartão Internacional"
                 bandeira="visa"
@@ -98,26 +146,17 @@ export default function HeroSection() {
                 holderName="SEU NOME AQUI"
               />
             </div>
-
-            {/* Badges below the card */}
-            <div className="flex flex-wrap justify-center gap-2 max-w-md">
-              {[
-                "Aceita Negativados",
-                "+93% de Aprovação",
-                "Simulação Grátis em 3 min",
-                "Sem Anuidade",
-                "Compras Online e Presenciais",
-              ].map((label, i) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 + i * 0.1, duration: 0.4 }}
-                  className="bg-gray-900 text-white rounded-full px-4 py-2 flex items-center gap-2"
+            <div className="flex flex-wrap justify-center gap-2">
+              {floatingBadges.map((badge) => (
+                <div
+                  key={badge.label}
+                  className="bg-gray-100 border border-gray-200 rounded-full px-3 py-1.5 flex items-center gap-1.5"
                 >
-                  <CheckCircleIcon size={14} className="text-emerald-400 shrink-0" />
-                  <span className="text-xs font-semibold whitespace-nowrap">{label}</span>
-                </motion.div>
+                  <CheckCircleIcon size={12} className="text-emerald-500 shrink-0" />
+                  <span className="text-xs font-semibold text-gray-700 whitespace-nowrap">
+                    {badge.label}
+                  </span>
+                </div>
               ))}
             </div>
           </motion.div>
