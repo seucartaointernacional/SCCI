@@ -7,7 +7,6 @@ import {
   ShieldCheckIcon,
   CheckCircleIcon,
   DollarSignIcon,
-  GlobeIcon,
 } from "@/components/icons";
 import CreditCard from "@/components/CreditCard";
 
@@ -50,10 +49,6 @@ export default function HeroSection() {
               <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5">
                 <CheckCircleIcon size={18} className="text-emerald-600 shrink-0" />
                 <span className="text-sm font-bold text-emerald-800">Sem cobranças extras</span>
-              </div>
-              <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2.5">
-                <GlobeIcon size={18} className="text-brand-600 shrink-0" />
-                <span className="text-sm font-bold text-brand-800">Qualquer moeda</span>
               </div>
             </div>
 
