@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { MenuIcon, XIcon } from "@/components/icons";
 
 const navLinks = [
@@ -40,7 +41,12 @@ export default function Navbar() {
         scrolled ? "shadow-sm border-gray-200" : "border-gray-100"
       }`}
     >
-      <nav className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <motion.nav
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between"
+      >
         <Link href="/" className="shrink-0">
           <span className="text-lg font-extrabold text-gray-900 tracking-tight">
             Seu Cartão{" "}
@@ -74,7 +80,7 @@ export default function Navbar() {
         >
           <MenuIcon size={24} />
         </button>
-      </nav>
+      </motion.nav>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-50 md:hidden">

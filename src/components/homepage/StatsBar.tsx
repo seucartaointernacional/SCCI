@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { CreditCardIcon, CheckCircleIcon, ShieldCheckIcon } from "@/components/icons";
 
 const stats = [
@@ -26,13 +29,25 @@ export default function StatsBar() {
           {stats.map((stat, i) => {
             const IconComponent = stat.icon;
             return (
-              <div key={i} className="flex items-center gap-4 justify-center py-4 sm:py-0">
-                <IconComponent size={24} className="text-brand-600 shrink-0" />
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.4 }}
+                className="flex items-center gap-4 justify-center py-4 sm:py-0"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <IconComponent size={24} className="text-brand-600 shrink-0" />
+                </motion.div>
                 <div>
                   <p className="text-2xl font-extrabold text-gray-900">{stat.value}</p>
                   <p className="text-sm text-gray-500">{stat.label}</p>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

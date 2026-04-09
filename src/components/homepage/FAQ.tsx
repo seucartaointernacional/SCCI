@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ChevronDownIcon } from "@/components/icons";
 
 const faqs = [
@@ -45,22 +45,36 @@ const faqs = [
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+
   function toggleIndex(i: number) {
     setOpenIndex((prev) => (prev === i ? null : i));
   }
 
   return (
     <section id="duvidas" className="py-20 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-14">
+      <div className="max-w-2xl mx-auto" ref={ref}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-14"
+        >
           <h2 className="section-title">Dúvidas frequentes</h2>
-        </div>
+        </motion.div>
 
         <div className="divide-y divide-gray-100">
           {faqs.map((faq, i) => {
             const isOpen = openIndex === i;
             return (
-              <div key={i} className="py-4">
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -15 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                className="py-4"
+              >
                 <button
                   onClick={() => toggleIndex(i)}
                   className="w-full flex items-center justify-between text-left gap-4 group"
@@ -92,7 +106,7 @@ export default function FAQ() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             );
           })}
         </div>

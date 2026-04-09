@@ -1,8 +1,17 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { LockIcon } from "@/components/icons";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-12 px-4">
+    <motion.footer
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="bg-gray-900 text-white py-12 px-4"
+    >
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
@@ -46,6 +55,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

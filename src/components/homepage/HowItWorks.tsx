@@ -48,7 +48,8 @@ export default function HowItWorks() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15, duration: 0.4 }}
-                className="text-center p-8 rounded-2xl border border-gray-200 bg-white"
+                whileHover={{ y: -4 }}
+                className="text-center p-8 rounded-2xl border border-gray-200 bg-white hover:shadow-lg transition-shadow duration-300"
               >
                 <div className="w-14 h-14 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center mx-auto mb-5">
                   <IconComponent size={24} />

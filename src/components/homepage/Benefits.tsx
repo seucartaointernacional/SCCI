@@ -78,16 +78,19 @@ export default function Benefits() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, duration: 0.4 }}
-                className={`rounded-xl p-6 border ${
+                whileHover={{ y: benefit.highlight ? 0 : -4 }}
+                className={`rounded-xl p-6 border transition-shadow duration-300 ${
                   benefit.highlight
                     ? "bg-brand-700 border-brand-700"
-                    : "bg-white border-gray-200"
+                    : "bg-white border-gray-200 hover:shadow-lg"
                 }`}
               >
-                <IconComponent
-                  size={24}
-                  className={`mb-4 ${benefit.highlight ? "text-emerald-400" : "text-brand-600"}`}
-                />
+                <motion.div whileHover={{ scale: 1.1 }} transition={{ type: "spring", stiffness: 300 }}>
+                  <IconComponent
+                    size={24}
+                    className={`mb-4 ${benefit.highlight ? "text-emerald-400" : "text-brand-600"}`}
+                  />
+                </motion.div>
                 <h3 className={`font-bold mb-1.5 ${
                   benefit.highlight ? "text-xl text-white" : "text-base text-gray-900"
                 }`}>

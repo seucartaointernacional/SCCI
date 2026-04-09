@@ -46,7 +46,8 @@ export default function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.4 }}
-              className="bg-white rounded-xl p-6 border border-gray-200"
+              whileHover={{ y: -4 }}
+              className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300"
             >
               <div className="flex gap-0.5 mb-4">
                 {Array.from({ length: 5 }).map((_, j) => (
