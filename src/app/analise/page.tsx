@@ -4,17 +4,32 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useFlowStore } from "@/lib/store";
-import ProgressStep from "@/components/ProgressStep";
+import FlowHeader from "@/components/FlowHeader";
+import FlowFooter from "@/components/FlowFooter";
+import FlowProgress from "@/components/FlowProgress";
+import {
+  SearchIcon,
+  ChartIcon,
+  MapPinIcon,
+  BuildingIcon,
+  HandshakeIcon,
+  CheckCircleIcon,
+  SpinnerIcon,
+} from "@/components/icons";
+
+const STEP_ICONS = [SearchIcon, ChartIcon, MapPinIcon, BuildingIcon, HandshakeIcon];
 
 const STEPS = [
-  "Verificando CPF...",
-  "Analisando renda compatível...",
-  "Buscando melhor localidade...",
-  "Consultando bancos parceiros...",
-  "Negociando melhores limites...",
+  "Verificando CPF junto aos orgaos competentes",
+  "Analisando renda e capacidade de pagamento",
+  "Verificando endereco e regiao de entrega",
+  "Consultando bancos parceiros",
+  "Negociando as melhores condicoes",
 ];
 
 const STEP_DURATION = 2800; // ~2.8s per step, ~14s total
+
+const PROGRESS_LABELS = ["Dados", "Analise", "Proposta", "Pagamento", "Confirmacao"];
 
 export default function AnalisePage() {
   const router = useRouter();
@@ -65,61 +80,120 @@ export default function AnalisePage() {
   const progress = (currentStep / STEPS.length) * 100;
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center px-4">
-      <motion.div
-        className="card-container w-full"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        {/* Header */}
-        <div className="text-center mb-8">
-          <motion.h1
-            className="text-2xl font-bold text-gray-900 mb-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            Analisando seu perfil
-          </motion.h1>
-          <motion.p
-            className="text-gray-500 text-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            Aguarde enquanto processamos sua solicitação
-          </motion.p>
-        </div>
+    <div className="min-h-screen bg-white flex flex-col">
+      <FlowHeader backHref="/" />
+      <FlowProgress currentStep={2} totalSteps={5} labels={PROGRESS_LABELS} />
 
-        {/* Progress bar */}
-        <div className="mb-8">
-          <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600"
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-            />
+      <main className="flex-1 flex items-center justify-center px-4 py-8">
+        <motion.div
+          className="max-w-lg mx-auto w-full card-container"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          {/* Header */}
+          <div className="text-center mb-8">
+            <motion.h1
+              className="text-2xl font-bold text-gray-900 mb-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              Analisando seu perfil
+            </motion.h1>
+            <motion.p
+              className="text-gray-500 text-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              Aguarde enquanto processamos sua solicitacao
+            </motion.p>
           </div>
-          <p className="text-right text-xs text-gray-400 mt-1">
-            {Math.round(progress)}%
-          </p>
-        </div>
 
-        {/* Steps list */}
-        <div className="space-y-1">
-          {STEPS.map((label, index) => (
-            <ProgressStep
-              key={label}
-              label={label}
-              index={index}
-              isComplete={index < currentStep}
-              isActive={index === currentStep}
-            />
-          ))}
-        </div>
-      </motion.div>
-    </main>
+          {/* Steps list */}
+          <div className="space-y-1 mb-8">
+            {STEPS.map((label, index) => {
+              const IconComponent = STEP_ICONS[index];
+              const isComplete = index < currentStep;
+              const isActive = index === currentStep;
+
+              return (
+                <motion.div
+                  key={label}
+                  className="flex items-center gap-4 py-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1, ease: "easeOut" }}
+                >
+                  {/* Icon circle */}
+                  <div className="flex-shrink-0 relative">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300 ${
+                        isComplete
+                          ? "bg-emerald-50 text-emerald-600"
+                          : isActive
+                          ? "bg-brand-50 text-brand-600"
+                          : "bg-gray-50 text-gray-300"
+                      }`}
+                    >
+                      <IconComponent size={20} />
+                    </div>
+                    {isActive && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <SpinnerIcon size={40} className="text-brand-600 opacity-30" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Label */}
+                  <span
+                    className={`text-sm flex-1 transition-colors duration-300 ${
+                      isComplete
+                        ? "text-gray-900"
+                        : isActive
+                        ? "text-brand-600 font-medium"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {label}
+                  </span>
+
+                  {/* Complete check */}
+                  {isComplete && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <CheckCircleIcon size={20} className="text-emerald-500" />
+                    </motion.div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Progress bar */}
+          <div className="mb-6">
+            <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full rounded-full bg-brand-600"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              />
+            </div>
+          </div>
+
+          {/* Bottom text */}
+          <p className="text-xs text-gray-400 text-center mt-6">
+            Conectando voce as melhores ofertas de nossos bancos parceiros
+          </p>
+        </motion.div>
+      </main>
+
+      <FlowFooter />
+    </div>
   );
 }

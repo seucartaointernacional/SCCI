@@ -4,6 +4,10 @@ import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useFlowStore } from "@/lib/store";
+import FlowHeader from "@/components/FlowHeader";
+import FlowFooter from "@/components/FlowFooter";
+import FlowProgress from "@/components/FlowProgress";
+import { CheckCircleIcon, CalendarIcon, MailIcon } from "@/components/icons";
 
 function addBusinessDays(start: Date, days: number): Date {
   const result = new Date(start);
@@ -26,9 +30,11 @@ function formatDateBR(date: Date): string {
   });
 }
 
+const PROGRESS_LABELS = ["Dados", "Analise", "Proposta", "Pagamento", "Confirmacao"];
+
 export default function ConfirmacaoPage() {
   const router = useRouter();
-  const { paymentId, reset } = useFlowStore();
+  const { paymentId, reset, proposalData } = useFlowStore();
 
   // Guard: redirect to home if no paymentId
   useEffect(() => {
@@ -54,128 +60,99 @@ export default function ConfirmacaoPage() {
   if (!paymentId) return null;
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center px-4 py-8">
-      <div className="card-container w-full">
-        {/* Animated checkmark */}
-        <motion.div
-          className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100"
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 15, duration: 0.8 }}
-        >
-          <motion.svg
-            className="h-10 w-10 text-green-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
+    <div className="min-h-screen bg-white flex flex-col">
+      <FlowHeader showBack={false} />
+      <FlowProgress currentStep={5} totalSteps={5} labels={PROGRESS_LABELS} />
+
+      <main className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="max-w-lg mx-auto w-full card-container">
+          {/* Large animated green check with rotation */}
+          <motion.div
+            className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15, duration: 0.8 }}
           >
-            <motion.path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5 13l4 4L19 7"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ delay: 0.5, duration: 0.6, ease: "easeOut" }}
-            />
-          </motion.svg>
-        </motion.div>
+            <CheckCircleIcon size={40} className="text-emerald-600" />
+          </motion.div>
 
-        {/* Header */}
-        <motion.h1
-          className="text-center text-2xl font-bold text-green-600 mb-2"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.4 }}
-        >
-          Tudo certo!
-        </motion.h1>
+          {/* Title */}
+          <motion.h1
+            className="text-center text-2xl font-bold text-gray-900 mb-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+          >
+            Tudo certo!
+          </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p
-          className="text-center text-gray-500 text-sm mb-8"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.4 }}
-        >
-          O processo de importa&ccedil;&atilde;o e envio do seu cart&atilde;o foi iniciado com
-          sucesso.
-        </motion.p>
+          {/* Subtitle */}
+          <motion.p
+            className="text-center text-gray-500 text-sm mb-8"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.4 }}
+          >
+            Seu cartao esta a caminho
+          </motion.p>
 
-        {/* Delivery estimate box */}
-        <motion.div
-          className="bg-gray-50 rounded-xl p-4 mb-4"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0, duration: 0.4 }}
-        >
-          <div className="flex items-center gap-3 mb-2">
-            <svg
-              className="h-5 w-5 text-gray-500 flex-shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
-              />
-            </svg>
-            <span className="text-sm text-gray-600">
-              Prazo estimado de entrega
-            </span>
-          </div>
-          <p className="text-lg font-bold text-gray-900 ml-8">
-            22 a 36 dias &uacute;teis
-          </p>
-          <p className="text-xs text-gray-400 ml-8 mt-1">
-            Entre {dateMin} e {dateMax}
-          </p>
-        </motion.div>
+          {/* Delivery box */}
+          <motion.div
+            className="bg-gray-50 rounded-2xl p-5 mb-4"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.4 }}
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <CalendarIcon size={20} className="text-gray-500 flex-shrink-0" />
+              <span className="text-sm text-gray-600">
+                Prazo de entrega
+              </span>
+            </div>
+            <p className="text-lg font-bold text-gray-900 ml-8">
+              22 a 36 dias uteis
+            </p>
+            <p className="text-xs text-gray-400 ml-8 mt-1">
+              Entre {dateMin} e {dateMax}
+            </p>
+          </motion.div>
 
-        {/* Email confirmation box */}
-        <motion.div
-          className="bg-blue-50 rounded-xl p-4 mb-8"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.4 }}
-        >
-          <div className="flex items-center gap-3">
-            <svg
-              className="h-5 w-5 text-blue-500 flex-shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-              />
-            </svg>
-            <span className="text-sm text-blue-700">
-              Confirma&ccedil;&atilde;o enviada por e-mail
-            </span>
-          </div>
-        </motion.div>
+          {/* Email box */}
+          <motion.div
+            className="bg-brand-50 rounded-2xl p-5 mb-8"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 0.4 }}
+          >
+            <div className="flex items-center gap-3">
+              <MailIcon size={20} className="text-brand-600 flex-shrink-0" />
+              <div>
+                <span className="text-sm text-brand-700 block">
+                  Confirmacao enviada por e-mail
+                </span>
+                {proposalData?.lead?.email && (
+                  <span className="text-xs text-brand-500">
+                    {proposalData.lead.email}
+                  </span>
+                )}
+              </div>
+            </div>
+          </motion.div>
 
-        {/* Back to home button */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.4 }}
-        >
-          <button onClick={handleBackHome} className="btn-primary w-full">
-            Voltar ao In&iacute;cio
-          </button>
-        </motion.div>
-      </div>
-    </main>
+          {/* Back to home button */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.4, duration: 0.4 }}
+          >
+            <button onClick={handleBackHome} className="btn-secondary w-full">
+              Voltar ao Inicio
+            </button>
+          </motion.div>
+        </div>
+      </main>
+
+      <FlowFooter />
+    </div>
   );
 }

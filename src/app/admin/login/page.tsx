@@ -37,68 +37,66 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-sm">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-          <div className="text-center mb-6">
-            <h1 className="text-xl font-bold text-gray-900">
-              Seu Cartao Internacional
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">Painel Administrativo</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="max-w-sm w-full card-container">
+        <div className="text-center">
+          <h1 className="text-xl font-bold text-gray-900">
+            Seu Cartao Internacional
+          </h1>
+          <p className="text-sm text-gray-400 mt-1">Painel Administrativo</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700 mb-1.5"
+            >
+              Usuario
+            </label>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="input-field"
+              placeholder="Digite seu usuario"
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Usuario
-              </label>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Digite seu usuario"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Senha
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Digite sua senha"
-              />
-            </div>
-
-            {error && (
-              <div className="bg-red-50 text-red-600 text-sm px-3 py-2 rounded-lg">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1.5"
             >
-              {loading ? "Entrando..." : "Entrar"}
-            </button>
-          </form>
-        </div>
+              Senha
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="input-field"
+              placeholder="Digite sua senha"
+            />
+          </div>
+
+          {error && (
+            <div className="bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl p-3">
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary w-full"
+          >
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+        </form>
       </div>
     </div>
   );

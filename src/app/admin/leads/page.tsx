@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { formatCpfCnpj } from "@/lib/formatters";
+import { SearchIcon } from "@/components/icons";
 
 interface LeadProposal {
   id: string;
@@ -25,42 +26,22 @@ interface Lead {
 function getStatusBadge(lead: Lead) {
   const proposal = lead.proposals[0];
   if (!proposal) {
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
-        Sem proposta
-      </span>
-    );
+    return <span className="badge-gray">Sem proposta</span>;
   }
 
   if (proposal.payment?.status === "pago") {
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700">
-        Pago
-      </span>
-    );
+    return <span className="badge-green">Pago</span>;
   }
 
   if (proposal.status === "aceita") {
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700">
-        Proposta Aceita
-      </span>
-    );
+    return <span className="badge-blue">Proposta Aceita</span>;
   }
 
   if (proposal.status === "pendente") {
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-700">
-        Pendente
-      </span>
-    );
+    return <span className="badge-yellow">Pendente</span>;
   }
 
-  return (
-    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
-      {proposal.status}
-    </span>
-  );
+  return <span className="badge-gray">{proposal.status}</span>;
 }
 
 export default function AdminLeadsPage() {
@@ -95,25 +76,27 @@ export default function AdminLeadsPage() {
     return new Date(dateStr).toLocaleDateString("pt-BR");
   };
 
-  const formatBrl = (value: number) =>
-    value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Leads</h1>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <input
-          type="text"
-          placeholder="Buscar por nome ou CPF/CNPJ..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
+        <div className="relative flex-1">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+            <SearchIcon size={16} />
+          </div>
+          <input
+            type="text"
+            placeholder="Buscar por nome ou CPF/CNPJ..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="input-field pl-10"
+          />
+        </div>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+          className="input-field w-full sm:w-48"
         >
           <option value="">Todos</option>
           <option value="aceita">Proposta Aceita</option>
@@ -130,60 +113,48 @@ export default function AdminLeadsPage() {
           <p className="text-gray-500">Nenhum lead encontrado</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="card-container !p-0 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <table className="min-w-full">
+              <thead>
+                <tr className="border-b border-gray-100">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Nome
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     CPF/CNPJ
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    E-mail
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    Email
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Telefone
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Renda
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Data
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-50">
                 {leads.map((lead) => (
                   <tr
                     key={lead.id}
                     onClick={() => router.push(`/admin/leads/${lead.id}`)}
                     className="hover:bg-gray-50 cursor-pointer transition-colors"
                   >
-                    <td className="px-4 py-3 text-sm text-gray-900 font-medium whitespace-nowrap">
+                    <td className="px-6 py-3 text-sm text-gray-900 font-medium whitespace-nowrap">
                       {lead.nome}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
+                    <td className="px-6 py-3 text-sm text-gray-500 whitespace-nowrap">
                       {formatCpfCnpj(lead.cpfCnpj)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
+                    <td className="px-6 py-3 text-sm text-gray-500 whitespace-nowrap">
                       {lead.email}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
-                      {lead.telefone}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
-                      {formatBrl(lead.renda)}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="px-6 py-3 whitespace-nowrap">
                       {getStatusBadge(lead)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
+                    <td className="px-6 py-3 text-sm text-gray-500 whitespace-nowrap">
                       {formatDate(lead.createdAt)}
                     </td>
                   </tr>

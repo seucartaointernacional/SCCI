@@ -6,11 +6,17 @@ import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 import { useFlowStore } from "@/lib/store";
 import { formatBRL, TAXA_IMPORTACAO } from "@/lib/proposal-utils";
+import FlowHeader from "@/components/FlowHeader";
+import FlowFooter from "@/components/FlowFooter";
+import FlowProgress from "@/components/FlowProgress";
+import { CopyIcon, CheckIcon, ClockIcon, ShieldCheckIcon } from "@/components/icons";
 
 const PIX_PAYLOAD =
   "00020126580014br.gov.bcb.pix0136a1b2c3d4-e5f6-7890-abcd-ef1234567890520400005303986540536.405802BR5925KARDBANK PAGAMENTOS LTDA6009SAO PAULO62070503***6304ABCD";
 
 const TIMER_SECONDS = 30 * 60; // 30 minutes
+
+const PROGRESS_LABELS = ["Dados", "Analise", "Proposta", "Pagamento", "Confirmacao"];
 
 export default function PagamentoPage() {
   const router = useRouter();
@@ -85,164 +91,145 @@ export default function PagamentoPage() {
   if (!paymentId) return null;
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center px-4 py-8">
-      <motion.div
-        className="card-container w-full"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      >
-        {/* Header */}
-        <div className="text-center mb-6">
-          <motion.h1
-            className="text-2xl font-bold text-gray-900 mb-2"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+    <div className="min-h-screen bg-white flex flex-col">
+      <FlowHeader backHref="/aceita" />
+      <FlowProgress currentStep={4} totalSteps={5} labels={PROGRESS_LABELS} />
+
+      <main className="flex-1 flex items-center justify-center px-4 py-8">
+        <motion.div
+          className="max-w-lg mx-auto w-full card-container"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          {/* Header */}
+          <div className="text-center mb-6">
+            <motion.h1
+              className="text-2xl font-bold text-gray-900 mb-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              Pagamento via PIX
+            </motion.h1>
+            <motion.p
+              className="text-gray-500 text-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              Escaneie o QR Code ou copie o codigo PIX
+            </motion.p>
+          </div>
+
+          {/* QR Code */}
+          <motion.div
+            className="flex justify-center mb-6"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
           >
-            Pagamento via PIX
-          </motion.h1>
-          <motion.p
-            className="text-gray-500 text-sm"
+            <div className="bg-white p-4 rounded-2xl shadow-card border border-gray-100 inline-block">
+              <QRCodeSVG value={PIX_PAYLOAD} size={200} />
+            </div>
+          </motion.div>
+
+          {/* Amount box */}
+          <motion.div
+            className="bg-gray-50 rounded-xl p-4 text-center mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.4 }}
           >
-            Escaneie o QR Code ou copie o c&oacute;digo PIX
-          </motion.p>
-        </div>
+            <p className="text-2xl font-bold text-gray-900">
+              {formatBRL(TAXA_IMPORTACAO)}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">
+              Importacao + Frete
+            </p>
+          </motion.div>
 
-        {/* QR Code */}
-        <motion.div
-          className="flex justify-center mb-6"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-        >
-          <div className="bg-white border-2 border-gray-200 rounded-2xl p-4">
-            <QRCodeSVG value={PIX_PAYLOAD} size={200} />
-          </div>
-        </motion.div>
-
-        {/* Amount display */}
-        <motion.div
-          className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center mb-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <p className="text-2xl font-bold text-blue-700">
-            {formatBRL(TAXA_IMPORTACAO)}
-          </p>
-          <p className="text-sm text-blue-500 mt-1">
-            Importa&ccedil;&atilde;o + Frete
-          </p>
-        </motion.div>
-
-        {/* Countdown timer */}
-        <motion.div
-          className="text-center mb-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">
-            Expira em
-          </p>
-          <p
-            className={`text-xl font-mono font-bold ${
-              secondsLeft <= 300 ? "text-red-500" : "text-gray-700"
-            }`}
+          {/* Copy PIX button */}
+          <motion.div
+            className="mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
           >
-            {formatTime(secondsLeft)}
-          </p>
-        </motion.div>
+            <button
+              onClick={handleCopy}
+              className="btn-secondary w-full flex items-center justify-center gap-2"
+            >
+              {copied ? (
+                <>
+                  <CheckIcon size={18} className="text-emerald-600" />
+                  <span className="text-emerald-600">Copiado!</span>
+                </>
+              ) : (
+                <>
+                  <CopyIcon size={18} />
+                  Copiar codigo PIX
+                </>
+              )}
+            </button>
+          </motion.div>
 
-        {/* Copy PIX button */}
-        <motion.div
-          className="mb-4"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <button
-            onClick={handleCopy}
-            className="btn-secondary w-full flex items-center justify-center gap-2"
+          {/* Timer */}
+          <motion.div
+            className="flex items-center justify-center gap-2 mb-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
           >
-            {copied ? (
-              <>
-                <svg
-                  className="h-5 w-5 text-green-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span className="text-green-600">Copiado!</span>
-              </>
-            ) : (
-              <>
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
-                Copiar c&oacute;digo PIX
-              </>
-            )}
-          </button>
-        </motion.div>
+            <ClockIcon size={16} className={secondsLeft <= 300 ? "text-red-500" : "text-gray-400"} />
+            <p
+              className={`text-lg font-mono font-bold ${
+                secondsLeft <= 300 ? "text-red-500" : "text-gray-700"
+              }`}
+            >
+              {formatTime(secondsLeft)}
+            </p>
+          </motion.div>
 
-        {/* Disclaimer */}
-        <motion.p
-          className="text-xs text-gray-400 text-center mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-        >
-          O nome do recebedor pode variar conforme o banco processador.
-        </motion.p>
-
-        {/* Simulate payment section */}
-        <motion.div
-          className="border-t border-gray-200 pt-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-        >
-          <p className="text-xs text-gray-400 text-center uppercase tracking-wide mb-4">
-            Ambiente de demonstra&ccedil;&atilde;o
-          </p>
-          <button
-            onClick={handleSimulatePayment}
-            disabled={confirming}
-            className="btn-primary w-full disabled:opacity-60"
+          {/* Security */}
+          <motion.div
+            className="flex items-center justify-center gap-2 mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
           >
-            {confirming ? (
-              <span className="flex items-center justify-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                Confirmando...
-              </span>
-            ) : (
-              "Simular Pagamento Confirmado"
-            )}
-          </button>
+            <ShieldCheckIcon size={14} className="text-emerald-600" />
+            <p className="text-xs text-emerald-600">
+              Pagamento processado em ambiente seguro
+            </p>
+          </motion.div>
+
+          {/* Simulate payment section */}
+          <motion.div
+            className="border-t border-gray-100 pt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            <button
+              onClick={handleSimulatePayment}
+              disabled={confirming}
+              className="w-full py-2.5 text-xs text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-60"
+            >
+              {confirming ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+                  Confirmando...
+                </span>
+              ) : (
+                "Simular Pagamento"
+              )}
+            </button>
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </main>
+      </main>
+
+      <FlowFooter />
+    </div>
   );
 }

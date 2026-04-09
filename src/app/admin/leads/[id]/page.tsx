@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 import { formatCpfCnpj } from "@/lib/formatters";
+import {
+  ChevronRightIcon,
+  MailIcon,
+  TrashIcon,
+} from "@/components/icons";
 
 interface LeadDetail {
   id: string;
@@ -46,6 +52,7 @@ export default function AdminLeadDetailPage() {
   const [loading, setLoading] = useState(true);
   const [resending, setResending] = useState(false);
   const [resendMessage, setResendMessage] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     fetch(`/api/admin/leads/${id}`)
@@ -74,6 +81,30 @@ export default function AdminLeadDetailPage() {
       setResendMessage("Erro de conexao");
     } finally {
       setResending(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm("Tem certeza que deseja excluir este lead? Esta acao nao pode ser desfeita.")) {
+      return;
+    }
+
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/leads/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        router.push("/admin/leads");
+      } else {
+        const data = await res.json();
+        alert(data.error || "Erro ao excluir lead");
+      }
+    } catch {
+      alert("Erro de conexao");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -109,215 +140,200 @@ export default function AdminLeadDetailPage() {
   const payment = proposal?.payment || null;
   const isPaid = payment?.status === "pago";
 
+  function getLeadStatusBadge() {
+    if (!proposal) return <span className="badge-gray">Sem proposta</span>;
+    if (isPaid) return <span className="badge-green">Pago</span>;
+    if (proposal.status === "aceita") return <span className="badge-blue">Proposta Aceita</span>;
+    if (proposal.status === "pendente") return <span className="badge-yellow">Pendente</span>;
+    return <span className="badge-gray">{proposal.status}</span>;
+  }
+
   return (
     <div>
-      <button
-        onClick={() => router.push("/admin/leads")}
-        className="text-sm text-blue-600 hover:text-blue-800 font-medium mb-4 inline-block"
-      >
-        &larr; Voltar para Leads
-      </button>
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-1.5 text-sm text-gray-400 mb-4">
+        <Link href="/admin" className="hover:text-gray-600 transition-colors">
+          Dashboard
+        </Link>
+        <ChevronRightIcon size={14} />
+        <Link href="/admin/leads" className="hover:text-gray-600 transition-colors">
+          Leads
+        </Link>
+        <ChevronRightIcon size={14} />
+        <span className="text-gray-700 font-medium">{lead.nome}</span>
+      </nav>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">{lead.nome}</h1>
+      {/* Title + Badge */}
+      <div className="flex items-center gap-3 mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">{lead.nome}</h1>
+        {getLeadStatusBadge()}
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Personal Data */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+      {/* 2-column grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left: Dados Pessoais */}
+        <div className="lg:col-span-2 card-container">
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">
             Dados Pessoais
           </h2>
-          <dl className="space-y-3">
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">Nome</dt>
-              <dd className="text-sm text-gray-900 font-medium">{lead.nome}</dd>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Nome</p>
+              <p className="text-sm font-semibold text-gray-900">{lead.nome}</p>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">CPF/CNPJ</dt>
-              <dd className="text-sm text-gray-900 font-medium">
-                {formatCpfCnpj(lead.cpfCnpj)}
-              </dd>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">CPF/CNPJ</p>
+              <p className="text-sm font-semibold text-gray-900">{formatCpfCnpj(lead.cpfCnpj)}</p>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">E-mail</dt>
-              <dd className="text-sm text-gray-900 font-medium">
-                {lead.email}
-              </dd>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Email</p>
+              <p className="text-sm font-semibold text-gray-900">{lead.email}</p>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">Telefone</dt>
-              <dd className="text-sm text-gray-900 font-medium">
-                {lead.telefone}
-              </dd>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Telefone</p>
+              <p className="text-sm font-semibold text-gray-900">{lead.telefone}</p>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">CEP</dt>
-              <dd className="text-sm text-gray-900 font-medium">{lead.cep}</dd>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">CEP</p>
+              <p className="text-sm font-semibold text-gray-900">{lead.cep}</p>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">Cidade/Estado</dt>
-              <dd className="text-sm text-gray-900 font-medium">
-                {lead.cidade} / {lead.estado}
-              </dd>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Cidade</p>
+              <p className="text-sm font-semibold text-gray-900">{lead.cidade}</p>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">Renda</dt>
-              <dd className="text-sm text-gray-900 font-medium">
-                {formatBrl(lead.renda)}
-              </dd>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Estado</p>
+              <p className="text-sm font-semibold text-gray-900">{lead.estado}</p>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">Limite Desejado</dt>
-              <dd className="text-sm text-gray-900 font-medium">
-                {formatBrl(lead.limiteDesejado)}
-              </dd>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Renda</p>
+              <p className="text-sm font-semibold text-gray-900">{formatBrl(lead.renda)}</p>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">Negativado</dt>
-              <dd className="text-sm text-gray-900 font-medium">
-                {lead.negativado ? "Sim" : "Nao"}
-              </dd>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Limite Desejado</p>
+              <p className="text-sm font-semibold text-gray-900">{formatBrl(lead.limiteDesejado)}</p>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-sm text-gray-500">Data de Cadastro</dt>
-              <dd className="text-sm text-gray-900 font-medium">
-                {formatDate(lead.createdAt)}
-              </dd>
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Negativado</p>
+              <p className="text-sm font-semibold text-gray-900">{lead.negativado ? "Sim" : "Nao"}</p>
             </div>
-          </dl>
+            <div className="sm:col-span-2">
+              <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Data de Cadastro</p>
+              <p className="text-sm font-semibold text-gray-900">{formatDate(lead.createdAt)}</p>
+            </div>
+          </div>
         </div>
 
-        {/* Proposal & Payment */}
-        <div className="space-y-6">
-          {/* Proposal */}
-          {proposal ? (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Proposta
-              </h2>
-              <dl className="space-y-3">
-                <div className="flex justify-between">
-                  <dt className="text-sm text-gray-500">Cartao</dt>
-                  <dd className="text-sm text-gray-900 font-medium">
-                    {proposal.card.nome}
-                  </dd>
+        {/* Right: Proposta + Pagamento */}
+        <div className="lg:col-span-1 space-y-6">
+          {/* Proposta */}
+          <div className="card-container">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Proposta
+            </h2>
+            {proposal ? (
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Cartao</p>
+                  <p className="text-sm font-semibold text-gray-900">{proposal.card.nome}</p>
                 </div>
-                <div className="flex justify-between">
-                  <dt className="text-sm text-gray-500">Bandeira</dt>
-                  <dd className="text-sm text-gray-900 font-medium">
-                    {proposal.card.bandeira}
-                  </dd>
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Bandeira</p>
+                  <p className="text-sm font-semibold text-gray-900">{proposal.card.bandeira}</p>
                 </div>
-                <div className="flex justify-between">
-                  <dt className="text-sm text-gray-500">Limite (BRL)</dt>
-                  <dd className="text-sm text-gray-900 font-medium">
-                    {formatBrl(proposal.limiteBrl)}
-                  </dd>
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Limite (BRL)</p>
+                  <p className="text-sm font-semibold text-gray-900">{formatBrl(proposal.limiteBrl)}</p>
                 </div>
-                <div className="flex justify-between">
-                  <dt className="text-sm text-gray-500">
-                    Limite ({proposal.moeda})
-                  </dt>
-                  <dd className="text-sm text-gray-900 font-medium">
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Limite ({proposal.moeda})</p>
+                  <p className="text-sm font-semibold text-gray-900">
                     {proposal.limiteEstrangeiro.toLocaleString("pt-BR", {
                       style: "currency",
                       currency: proposal.moeda,
                     })}
-                  </dd>
+                  </p>
                 </div>
-                <div className="flex justify-between items-center">
-                  <dt className="text-sm text-gray-500">Status</dt>
-                  <dd>
-                    <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                        proposal.status === "aceita"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
-                    >
-                      {proposal.status === "aceita" ? "Aceita" : "Pendente"}
-                    </span>
-                  </dd>
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Status</p>
+                  <span
+                    className={
+                      proposal.status === "aceita" ? "badge-green" : "badge-yellow"
+                    }
+                  >
+                    {proposal.status === "aceita" ? "Aceita" : "Pendente"}
+                  </span>
                 </div>
-              </dl>
-            </div>
-          ) : (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Proposta
-              </h2>
+              </div>
+            ) : (
               <p className="text-sm text-gray-500">Nenhuma proposta gerada</p>
-            </div>
-          )}
+            )}
+          </div>
 
-          {/* Payment */}
-          {payment ? (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Pagamento
-              </h2>
-              <dl className="space-y-3">
-                <div className="flex justify-between">
-                  <dt className="text-sm text-gray-500">Valor</dt>
-                  <dd className="text-sm text-gray-900 font-medium">
-                    {formatBrl(payment.valor)}
-                  </dd>
+          {/* Pagamento */}
+          <div className="card-container">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Pagamento
+            </h2>
+            {payment ? (
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Valor</p>
+                  <p className="text-sm font-semibold text-gray-900">{formatBrl(payment.valor)}</p>
                 </div>
-                <div className="flex justify-between items-center">
-                  <dt className="text-sm text-gray-500">Status</dt>
-                  <dd>
-                    <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                        isPaid
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
-                    >
-                      {isPaid ? "Pago" : "Aguardando"}
-                    </span>
-                  </dd>
+                <div>
+                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Status</p>
+                  <span className={isPaid ? "badge-green" : "badge-yellow"}>
+                    {isPaid ? "Pago" : "Aguardando"}
+                  </span>
                 </div>
                 {isPaid && payment.paidAt && (
-                  <div className="flex justify-between">
-                    <dt className="text-sm text-gray-500">Data do Pagamento</dt>
-                    <dd className="text-sm text-gray-900 font-medium">
-                      {formatDate(payment.paidAt)}
-                    </dd>
+                  <div>
+                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Data do Pagamento</p>
+                    <p className="text-sm font-semibold text-gray-900">{formatDate(payment.paidAt)}</p>
                   </div>
                 )}
-              </dl>
-
-              {isPaid && (
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <button
-                    onClick={handleResendEmail}
-                    disabled={resending}
-                    className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {resending ? "Enviando..." : "Reenviar E-mail"}
-                  </button>
-                  {resendMessage && (
-                    <p
-                      className={`text-sm mt-2 text-center ${
-                        resendMessage.includes("sucesso")
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {resendMessage}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Pagamento
-              </h2>
+              </div>
+            ) : (
               <p className="text-sm text-gray-500">Nenhum pagamento registrado</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
+      </div>
+
+      {/* Action buttons */}
+      <div className="flex flex-col sm:flex-row gap-3 mt-6">
+        {isPaid && (
+          <div>
+            <button
+              onClick={handleResendEmail}
+              disabled={resending}
+              className="btn-primary flex items-center gap-2"
+            >
+              <MailIcon size={16} />
+              {resending ? "Enviando..." : "Reenviar E-mail"}
+            </button>
+            {resendMessage && (
+              <p
+                className={`text-sm mt-2 ${
+                  resendMessage.includes("sucesso")
+                    ? "text-emerald-600"
+                    : "text-red-600"
+                }`}
+              >
+                {resendMessage}
+              </p>
+            )}
+          </div>
+        )}
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="btn-ghost text-red-500 hover:text-red-600 flex items-center gap-2"
+        >
+          <TrashIcon size={16} />
+          {deleting ? "Excluindo..." : "Excluir Lead"}
+        </button>
       </div>
     </div>
   );
