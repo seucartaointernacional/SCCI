@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useFlowStore } from "@/lib/store";
 import CreditCard from "@/components/CreditCard";
-import { formatBRL, formatForeignCurrency } from "@/lib/proposal-utils";
+import { formatBRL } from "@/lib/proposal-utils";
 import FlowHeader from "@/components/FlowHeader";
 import FlowFooter from "@/components/FlowFooter";
 import FlowProgress from "@/components/FlowProgress";
-import { ClockIcon } from "@/components/icons";
+import { ClockIcon, CheckCircleIcon, DollarSignIcon } from "@/components/icons";
 
 type View = "loading" | "proposal" | "recusa";
 
@@ -23,14 +23,12 @@ export default function PropostaPage() {
   const [accepting, setAccepting] = useState(false);
   const [declining, setDeclining] = useState(false);
 
-  // Guard: redirect to home if no proposalId
   useEffect(() => {
     if (!proposalId) {
       router.replace("/");
     }
   }, [proposalId, router]);
 
-  // Fetch proposal data on mount
   useEffect(() => {
     if (!proposalId) return;
 
@@ -50,7 +48,6 @@ export default function PropostaPage() {
     fetchProposal();
   }, [proposalId, setProposalData, router]);
 
-  // Accept handler
   async function handleAccept() {
     if (!proposalId || accepting) return;
     setAccepting(true);
@@ -68,7 +65,6 @@ export default function PropostaPage() {
     }
   }
 
-  // Decline handler
   async function handleDecline() {
     if (!proposalId || declining) return;
     setDeclining(true);
@@ -85,7 +81,6 @@ export default function PropostaPage() {
     }
   }
 
-  // Don't render anything while redirecting
   if (!proposalId) return null;
 
   return (
@@ -123,22 +118,43 @@ export default function PropostaPage() {
               {/* Header */}
               <div className="text-center mb-6">
                 <motion.h1
-                  className="text-2xl font-bold text-emerald-600 mb-2"
+                  className="text-xl font-bold text-emerald-600 mb-2"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  Conseguimos uma proposta para você!
+                  Proposta aprovada!
                 </motion.h1>
                 <motion.p
                   className="text-gray-500 text-sm"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
+                  transition={{ delay: 0.3 }}
                 >
-                  Confira os detalhes do seu cartão internacional — sem anuidade e sem cobranças extras
+                  Confira os detalhes do seu cartão internacional
                 </motion.p>
               </div>
+
+              {/* Badges */}
+              <motion.div
+                className="flex flex-wrap justify-center gap-2 mb-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.35 }}
+              >
+                <div className="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1.5">
+                  <CheckCircleIcon size={14} className="text-emerald-500" />
+                  <span className="text-xs font-semibold text-emerald-700">Anuidade R$ 0</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1.5">
+                  <CheckCircleIcon size={14} className="text-emerald-500" />
+                  <span className="text-xs font-semibold text-emerald-700">Manutenção R$ 0</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-blue-50 border border-blue-200 rounded-full px-3 py-1.5">
+                  <DollarSignIcon size={14} className="text-brand-500" />
+                  <span className="text-xs font-semibold text-brand-700">Moeda: BRL</span>
+                </div>
+              </motion.div>
 
               {/* Credit Card */}
               <motion.div
@@ -157,7 +173,7 @@ export default function PropostaPage() {
                 />
               </motion.div>
 
-              {/* Proposal details 2x2 grid */}
+              {/* Proposal details */}
               <motion.div
                 className="grid grid-cols-2 gap-3 mb-6"
                 initial={{ opacity: 0 }}
@@ -171,22 +187,7 @@ export default function PropostaPage() {
                   </p>
                 </div>
                 <div className="bg-gray-50 rounded-xl p-3">
-                  <p className="text-xs text-gray-400">Moeda</p>
-                  <p className="text-sm font-semibold text-gray-900 mt-0.5">
-                    {proposalData.moeda}
-                  </p>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-3">
-                  <p className="text-xs text-gray-400">Limite estrangeiro</p>
-                  <p className="text-sm font-semibold text-gray-900 mt-0.5">
-                    {formatForeignCurrency(
-                      proposalData.limiteEstrangeiro,
-                      proposalData.moeda
-                    )}
-                  </p>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-3">
-                  <p className="text-xs text-gray-400">Limite BRL</p>
+                  <p className="text-xs text-gray-400">Limite</p>
                   <p className="text-sm font-semibold text-gray-900 mt-0.5">
                     {formatBRL(proposalData.limiteBrl)}
                   </p>
@@ -240,7 +241,6 @@ export default function PropostaPage() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              {/* Sad icon */}
               <motion.div
                 className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100"
                 initial={{ scale: 0 }}
