@@ -80,15 +80,16 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right column - Credit Card */}
+          {/* Right column - Credit Card with floating badges */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex items-center justify-center lg:justify-end"
           >
-            <div className="w-full max-w-sm lg:max-w-md">
-              <div className="transform hover:scale-[1.03] transition-transform duration-500">
+            <div className="relative w-full max-w-sm lg:max-w-md">
+              {/* Card */}
+              <div className="relative z-10">
                 <CreditCard
                   nome="Cartão Internacional"
                   bandeira="visa"
@@ -98,6 +99,57 @@ export default function HeroSection() {
                   holderName="SEU NOME AQUI"
                 />
               </div>
+
+              {/* Floating badges around the card */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+                className="absolute -left-4 top-2 z-20 bg-white rounded-lg shadow-lg border border-gray-200 px-3 py-2 flex items-center gap-2"
+              >
+                <CheckCircleIcon size={16} className="text-emerald-500 shrink-0" />
+                <span className="text-xs font-semibold text-gray-700 whitespace-nowrap">Aceita Negativados</span>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.9, duration: 0.5 }}
+                className="absolute -right-4 top-0 z-20 bg-white rounded-lg shadow-lg border border-gray-200 px-3 py-2 flex items-center gap-2"
+              >
+                <CheckCircleIcon size={16} className="text-emerald-500 shrink-0" />
+                <span className="text-xs font-semibold text-gray-700 whitespace-nowrap">+93% de Aprovação</span>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.1, duration: 0.5 }}
+                className="absolute -left-6 bottom-[45%] z-20 bg-white rounded-lg shadow-lg border border-gray-200 px-3 py-2 flex items-center gap-2"
+              >
+                <CheckCircleIcon size={16} className="text-brand-500 shrink-0" />
+                <span className="text-xs font-semibold text-gray-700 whitespace-nowrap">Simulação Grátis em 3 min</span>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.3, duration: 0.5 }}
+                className="absolute -right-6 bottom-[40%] z-20 bg-white rounded-lg shadow-lg border border-gray-200 px-3 py-2 flex items-center gap-2"
+              >
+                <CheckCircleIcon size={16} className="text-emerald-500 shrink-0" />
+                <span className="text-xs font-semibold text-gray-700 whitespace-nowrap">Sem Anuidade</span>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.5, duration: 0.5 }}
+                className="absolute left-1/2 -translate-x-1/2 -bottom-5 z-20 bg-white rounded-lg shadow-lg border border-gray-200 px-3 py-2 flex items-center gap-2"
+              >
+                <CheckCircleIcon size={16} className="text-brand-500 shrink-0" />
+                <span className="text-xs font-semibold text-gray-700 whitespace-nowrap">Compras Online e Presenciais</span>
+              </motion.div>
             </div>
           </motion.div>
         </div>
