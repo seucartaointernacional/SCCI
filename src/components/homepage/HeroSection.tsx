@@ -25,8 +25,9 @@ export default function HeroSection() {
             </h1>
 
             <p className="text-lg text-brand-200 leading-relaxed max-w-lg">
-              Processo 100% online, resposta em minutos e entrega em todo o
-              Brasil. Sem consulta ao SPC/Serasa.
+              Um cartão aprovado por bancos internacionais que funciona como
+              qualquer cartão brasileiro. Use em real, dólar, euro ou qualquer
+              moeda. Processo 100% online e sem consulta ao SPC/Serasa.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 pt-2">

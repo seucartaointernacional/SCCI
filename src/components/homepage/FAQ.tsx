@@ -8,7 +8,7 @@ const faqs = [
   {
     question: "O que é o Seu Cartão Internacional?",
     answer:
-      "Somos uma plataforma que conecta você às melhores ofertas de cartões de crédito internacionais de bancos parceiros. Facilitamos todo o processo para que você receba seu cartão sem burocracia.",
+      "Somos uma plataforma que conecta você a bancos parceiros internacionais para emissão de cartões de crédito. O cartão funciona como qualquer cartão brasileiro — você usa em real, dólar, euro ou qualquer moeda — mas é aprovado por bancos do mundo todo, o que facilita a aprovação mesmo para quem tem restrições no nome.",
   },
   {
     question: "Como funciona o processo?",

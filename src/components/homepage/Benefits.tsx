@@ -13,15 +13,15 @@ import {
 const benefits = [
   {
     icon: GlobeIcon,
-    title: "Aceito em mais de 150 países",
+    title: "Aprovado por bancos internacionais",
     description:
-      "Use seu cartão em qualquer estabelecimento que aceite Visa ou Mastercard no mundo.",
+      "Cartão emitido por bancos parceiros no exterior, com a mesma praticidade de um cartão brasileiro. Aceito em mais de 150 países.",
   },
   {
     icon: DollarSignIcon,
-    title: "Compras em dólar, euro e libra",
+    title: "Funciona em qualquer moeda",
     description:
-      "Pague em moeda estrangeira direto no cartão, sem precisar abrir conta no exterior.",
+      "Use em real, dólar, euro, libra ou qualquer outra moeda. Funciona como um cartão brasileiro comum, mas aceito no mundo todo.",
   },
   {
     icon: CalendarIcon,
