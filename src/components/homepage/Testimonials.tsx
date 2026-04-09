@@ -7,21 +7,39 @@ const testimonials = [
   {
     name: "Maria S.",
     location: "São Paulo, SP",
-    initials: "MS",
+    color: "from-blue-400 to-blue-600",
+    icon: (
+      <svg viewBox="0 0 36 36" fill="none" className="w-full h-full">
+        <circle cx="18" cy="12" r="6" fill="white" opacity="0.9" />
+        <ellipse cx="18" cy="28" rx="10" ry="7" fill="white" opacity="0.7" />
+      </svg>
+    ),
     quote:
       "Recebi meu cartão em 25 dias. O processo foi rápido e transparente, sem nenhuma surpresa. Já usei pra comprar em sites internacionais e funcionou perfeitamente.",
   },
   {
     name: "Carlos R.",
     location: "Belo Horizonte, MG",
-    initials: "CR",
+    color: "from-emerald-400 to-emerald-600",
+    icon: (
+      <svg viewBox="0 0 36 36" fill="none" className="w-full h-full">
+        <circle cx="18" cy="12" r="6" fill="white" opacity="0.9" />
+        <ellipse cx="18" cy="28" rx="10" ry="7" fill="white" opacity="0.7" />
+      </svg>
+    ),
     quote:
       "Estava com o nome negativado e achei que não conseguiria. Fiz a solicitação sem muita esperança e fui aprovado. Cartão chegou certinho no prazo.",
   },
   {
     name: "Ana L.",
     location: "Recife, PE",
-    initials: "AL",
+    color: "from-violet-400 to-violet-600",
+    icon: (
+      <svg viewBox="0 0 36 36" fill="none" className="w-full h-full">
+        <circle cx="18" cy="12" r="6" fill="white" opacity="0.9" />
+        <ellipse cx="18" cy="28" rx="10" ry="7" fill="white" opacity="0.7" />
+      </svg>
+    ),
     quote:
       "Precisava de um cartão internacional pra uma viagem e consegui o meu em menos de um mês. Atendimento sério e processo bem organizado.",
   },
@@ -74,8 +92,8 @@ export default function Testimonials() {
               {/* Divider */}
               <div className="border-t border-gray-100 pt-4 flex items-center gap-3">
                 {/* Avatar */}
-                <div className="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center text-sm font-bold shrink-0">
-                  {testimonial.initials}
+                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${testimonial.color} flex items-center justify-center shrink-0 overflow-hidden`}>
+                  {testimonial.icon}
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900 text-sm">
