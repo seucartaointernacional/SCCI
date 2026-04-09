@@ -3,9 +3,10 @@ import FlowFooter from "@/components/FlowFooter";
 import FlowProgress from "@/components/FlowProgress";
 import LeadForm from "@/components/LeadForm";
 
+
 export default function SolicitarPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-50">
       <FlowHeader />
       <FlowProgress
         currentStep={1}
@@ -13,9 +14,9 @@ export default function SolicitarPage() {
         labels={["Dados", "Análise", "Proposta", "Pagamento", "Confirmação"]}
       />
 
-      <section className="px-4 pt-8 pb-4">
+      <section className="px-4 pt-10 pb-4">
         <div className="max-w-lg mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">
             Solicite seu cartão
           </h2>
           <p className="text-gray-500 text-base mb-8">
