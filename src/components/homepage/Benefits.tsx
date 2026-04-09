@@ -80,7 +80,7 @@ export default function Benefits() {
                 transition={{ delay: i * 0.08, duration: 0.4 }}
                 className={`rounded-xl p-6 border ${
                   benefit.highlight
-                    ? "bg-brand-700 border-brand-700 col-span-1 md:col-span-2 lg:col-span-3"
+                    ? "bg-brand-700 border-brand-700"
                     : "bg-white border-gray-200"
                 }`}
               >
