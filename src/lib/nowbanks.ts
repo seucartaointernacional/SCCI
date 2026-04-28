@@ -93,3 +93,41 @@ export async function getAccessToken(): Promise<string> {
 export function __resetTokenCacheForTests(): void {
   cachedToken = null;
 }
+
+export async function createDeposit(params: CreateDepositParams): Promise<CreateDepositResult> {
+  const token = await getAccessToken();
+
+  const body: Record<string, unknown> = {
+    amount: params.amount,
+    external_id: params.externalId,
+  };
+  if (params.payer) {
+    body.payer = { name: params.payer.name, document: params.payer.document };
+  }
+  if (params.callbackUrl) {
+    body.clientCallbackUrl = params.callbackUrl;
+  }
+
+  const response = await fetch(`${getBaseUrl()}/v1/payments/deposit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new NowBanksError(response.status, text || "deposit failed", "/v1/payments/deposit");
+  }
+
+  const data = (await response.json()) as DepositResponse;
+  return {
+    transactionId: data.transaction_id,
+    status: data.status,
+    pixCopyPaste: data.pix_copy_paste,
+    pixQrCode: data.pix_qr_code,
+    amount: data.amount,
+  };
+}
