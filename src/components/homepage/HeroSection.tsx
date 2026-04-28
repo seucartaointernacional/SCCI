@@ -9,6 +9,7 @@ import {
   DollarSignIcon,
 } from "@/components/icons";
 import CreditCard from "@/components/CreditCard";
+import { TiltCard } from "@/components/TiltCard";
 
 const floatingBadges = [
   { label: "Aceita Negativados", x: "-10%", y: "5%" },
@@ -93,14 +94,22 @@ export default function HeroSection() {
           >
             <div className="relative" style={{ width: 420, height: 420 }}>
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px]">
-                <CreditCard
-                  nome="Cartão Internacional"
-                  bandeira="visa"
-                  corPrimaria="#0F172A"
-                  corSecundaria="#334155"
-                  corTexto="#ffffff"
-                  holderName="SEU NOME AQUI"
-                />
+                <TiltCard
+                  className="rounded-2xl"
+                  tiltLimit={12}
+                  scale={1.04}
+                  effect="evade"
+                  spotlight
+                >
+                  <CreditCard
+                    nome="Cartão Internacional"
+                    bandeira="visa"
+                    corPrimaria="#0F172A"
+                    corSecundaria="#334155"
+                    corTexto="#ffffff"
+                    holderName="SEU NOME AQUI"
+                  />
+                </TiltCard>
               </div>
 
               {floatingBadges.map((badge, i) => (
@@ -131,14 +140,22 @@ export default function HeroSection() {
             className="lg:hidden"
           >
             <div className="w-full max-w-xs mx-auto mb-5">
-              <CreditCard
-                nome="Cartão Internacional"
-                bandeira="visa"
-                corPrimaria="#0F172A"
-                corSecundaria="#334155"
-                corTexto="#ffffff"
-                holderName="SEU NOME AQUI"
-              />
+              <TiltCard
+                className="rounded-2xl"
+                tiltLimit={10}
+                scale={1.03}
+                effect="evade"
+                spotlight
+              >
+                <CreditCard
+                  nome="Cartão Internacional"
+                  bandeira="visa"
+                  corPrimaria="#0F172A"
+                  corSecundaria="#334155"
+                  corTexto="#ffffff"
+                  holderName="SEU NOME AQUI"
+                />
+              </TiltCard>
             </div>
             <div className="flex flex-wrap justify-center gap-1.5">
               {floatingBadges.map((badge) => (
