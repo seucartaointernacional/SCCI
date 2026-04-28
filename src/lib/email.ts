@@ -1,6 +1,12 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resendClient: Resend | null = null;
+function getResend(): Resend {
+  if (!resendClient) {
+    resendClient = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resendClient;
+}
 
 export interface ConfirmationEmailData {
   nome: string;
@@ -157,7 +163,7 @@ export async function sendConfirmationEmail(
   try {
     const html = buildConfirmationEmailHtml(data);
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: "Seu Cartão Internacional <noreply@seucartaointernacional.com>",
       to,
       subject: "Seu cartão internacional foi aprovado!",

@@ -50,11 +50,14 @@ model Proposal {
 }
 
 model Payment {
-  id         String    @id @default(cuid())
-  proposalId String    @unique
-  proposal   Proposal  @relation(fields: [proposalId], references: [id])
-  valor      Float
-  status     String    @default("aguardando")
-  paidAt     DateTime?
-  createdAt  DateTime  @default(now())
+  id                    String    @id @default(cuid())
+  proposalId            String    @unique
+  proposal              Proposal  @relation(fields: [proposalId], references: [id])
+  valor                 Float
+  status                String    @default("aguardando")
+  paidAt                DateTime?
+  nowbanksTransactionId String?   @unique
+  pixCopyPaste          String?
+  pixQrCode             String?
+  createdAt             DateTime  @default(now())
 }
