@@ -58,9 +58,13 @@ export default function PagamentoPage() {
           router.push("/confirmacao");
         }
       } catch (err) {
+        if (cancelled) return;
         console.error("Error fetching payment:", err);
-        if (cancelled && payment) return;
-        if (!payment) setLoadError(true);
+        // Only show the error UI if we have nothing to display yet.
+        setPayment((current) => {
+          if (!current) setLoadError(true);
+          return current;
+        });
       }
     }
 
@@ -71,7 +75,7 @@ export default function PagamentoPage() {
       cancelled = true;
       if (pollingRef.current) clearInterval(pollingRef.current);
     };
-  }, [paymentId, router, payment]);
+  }, [paymentId, router]);
 
   // Countdown.
   useEffect(() => {

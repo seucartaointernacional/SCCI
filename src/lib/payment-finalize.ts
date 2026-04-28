@@ -55,6 +55,15 @@ export async function finalizePayment(paymentId: string): Promise<FinalizeResult
 }
 
 export async function markPaymentFailed(paymentId: string, providerStatus: string): Promise<void> {
+  // Don't overwrite a paid status — a late FAILED webhook arriving after a successful
+  // COMPLETED would otherwise destroy the paid record.
+  const existing = await prisma.payment.findUnique({
+    where: { id: paymentId },
+    select: { status: true },
+  });
+  if (!existing || existing.status === "pago" || existing.status === "falhou") {
+    return;
+  }
   await prisma.payment.update({
     where: { id: paymentId },
     data: { status: "falhou" },
