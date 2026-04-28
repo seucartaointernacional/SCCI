@@ -59,3 +59,37 @@ function getCredentials(): { clientId: string; clientSecret: string } {
   }
   return { clientId, clientSecret };
 }
+
+let cachedToken: { value: string; expiresAt: number } | null = null;
+const REFRESH_BUFFER_MS = 60_000;
+
+export async function getAccessToken(): Promise<string> {
+  if (cachedToken && cachedToken.expiresAt - REFRESH_BUFFER_MS > Date.now()) {
+    return cachedToken.value;
+  }
+
+  const { clientId, clientSecret } = getCredentials();
+
+  const response = await fetch(`${getBaseUrl()}/v1/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ client_id: clientId, client_secret: clientSecret }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new NowBanksError(response.status, text || "auth failed", "/v1/auth/login");
+  }
+
+  const data = (await response.json()) as AuthResponse;
+  cachedToken = {
+    value: data.access_token,
+    expiresAt: Date.now() + data.expires_in * 1000,
+  };
+  return data.access_token;
+}
+
+// Exposed for tests only — resets the in-memory token cache.
+export function __resetTokenCacheForTests(): void {
+  cachedToken = null;
+}
