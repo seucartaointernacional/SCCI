@@ -135,18 +135,22 @@ export async function createDeposit(params: CreateDepositParams): Promise<Create
 }
 
 export function verifyWebhookSignature(rawBody: string, signatureHeader: string): boolean {
-  const secret = process.env.NOWBANKS_WEBHOOK_SECRET;
-  if (!secret || !signatureHeader) {
+  try {
+    const secret = process.env.NOWBANKS_WEBHOOK_SECRET;
+    if (!secret || !signatureHeader) {
+      return false;
+    }
+
+    const expected = crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
+    const expectedBuf = Buffer.from(expected, "hex");
+    const givenBuf = Buffer.from(signatureHeader, "hex");
+
+    if (expectedBuf.length !== givenBuf.length) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(expectedBuf, givenBuf);
+  } catch {
     return false;
   }
-
-  const expected = crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
-  const expectedBuf = Buffer.from(expected, "hex");
-  const givenBuf = Buffer.from(signatureHeader, "hex");
-
-  if (expectedBuf.length !== givenBuf.length) {
-    return false;
-  }
-
-  return crypto.timingSafeEqual(expectedBuf, givenBuf);
 }

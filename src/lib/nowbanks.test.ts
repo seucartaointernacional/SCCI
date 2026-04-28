@@ -47,4 +47,13 @@ describe("verifyWebhookSignature", () => {
     const body = '{"id":"evt_1"}';
     expect(verifyWebhookSignature(body, "abc123")).toBe(false);
   });
+
+  it("returns false (does not throw) when rawBody is invalid input at runtime", () => {
+    const sig = sign("anything", SECRET);
+    // Force TypeScript to allow non-string at runtime to verify defensive guard.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(verifyWebhookSignature(null as any, sig)).toBe(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(verifyWebhookSignature(undefined as any, sig)).toBe(false);
+  });
 });
