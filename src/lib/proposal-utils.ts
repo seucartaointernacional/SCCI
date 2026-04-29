@@ -20,8 +20,27 @@ export function generateDeterministicIndex(cpfCnpj: string, max: number): number
   return hashString(cpfCnpj) % max;
 }
 
-export function generateLimiteBrl(cpfCnpj: string): number {
+/**
+ * Gera um limite "próximo do desejado, mas sempre abaixo" — entre 70% e 95% do
+ * limite que o usuário pediu, arredondado para múltiplo de R$ 50.
+ *
+ * Se o desejado não for informado (compatibilidade), usa o range histórico de
+ * R$ 1.100 a R$ 2.400.
+ */
+export function generateLimiteBrl(cpfCnpj: string, limiteDesejado?: number): number {
   const hash = hashString(cpfCnpj);
+
+  if (limiteDesejado && limiteDesejado > 0) {
+    const minPct = 70;
+    const maxPct = 95;
+    const pctRange = maxPct - minPct;
+    const pct = minPct + (hash % (pctRange + 1));
+    const raw = (limiteDesejado * pct) / 100;
+    const rounded = Math.round(raw / 50) * 50;
+    // Garantia: nunca igualar nem ultrapassar o desejado
+    return Math.min(rounded, Math.max(50, limiteDesejado - 50));
+  }
+
   const range = 2400 - 1100;
   const raw = 1100 + (hash % (range + 1));
   return Math.round(raw / 50) * 50;

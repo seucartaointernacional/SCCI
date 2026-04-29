@@ -48,6 +48,10 @@ export async function POST(request: Request) {
         email: data.email,
         telefone: data.telefone,
         cep: data.cep,
+        rua: data.rua,
+        numero: data.numero,
+        complemento: data.complemento || null,
+        bairro: data.bairro,
         cidade: data.cidade,
         estado: data.estado,
         renda: data.renda,
@@ -60,6 +64,10 @@ export async function POST(request: Request) {
         email: data.email,
         telefone: data.telefone,
         cep: data.cep,
+        rua: data.rua,
+        numero: data.numero,
+        complemento: data.complemento || null,
+        bairro: data.bairro,
         cidade: data.cidade,
         estado: data.estado,
         renda: data.renda,
@@ -81,7 +89,7 @@ export async function POST(request: Request) {
     const card = cards[cardIndex];
 
     // Generate limits and currency
-    const limiteBrl = generateLimiteBrl(cpfCnpjClean);
+    const limiteBrl = generateLimiteBrl(cpfCnpjClean, data.limiteDesejado);
     const moedas: string[] = JSON.parse(card.moedas);
     const moeda = pickCurrency(cpfCnpjClean, moedas);
     const limiteEstrangeiro = convertToCurrency(limiteBrl, moeda);

@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import FormInput from "@/components/ui/FormInput";
 import { formatCpfCnpj, formatPhone, formatCEP } from "@/lib/formatters";
-import { leadFormSchema } from "@/lib/validations";
+import {
+  leadFormSchema,
+  FAIXAS_RENDA,
+  LIMITE_DESEJADO_MAX,
+} from "@/lib/validations";
 import { useFlowStore } from "@/lib/store";
 import { ArrowRightIcon, LockIcon } from "@/components/icons";
 
@@ -21,6 +25,19 @@ const fadeIn = {
   transition: { duration: 0.35 },
 };
 
+function formatBrlInput(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  const num = parseInt(digits, 10);
+  return num.toLocaleString("pt-BR");
+}
+
+function parseBrlInput(value: string): number {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return 0;
+  return parseInt(digits, 10);
+}
+
 export default function LeadForm() {
   const router = useRouter();
   const { setLeadId, setProposalId } = useFlowStore();
@@ -31,9 +48,13 @@ export default function LeadForm() {
     email: "",
     telefone: "",
     cep: "",
+    rua: "",
+    numero: "",
+    complemento: "",
+    bairro: "",
     cidade: "",
     estado: "",
-    renda: "",
+    faixaRenda: "" as (typeof FAIXAS_RENDA)[number]["value"] | "",
     limiteDesejado: "",
     negativado: false,
   });
@@ -46,8 +67,18 @@ export default function LeadForm() {
   const showCpfTel = form.nome.length >= 3;
   const showEmail = showCpfTel && form.cpfCnpj.length >= 11;
   const showEndereco = showEmail && form.email.includes("@");
-  const showFinanceiro = showEndereco && form.cep.length >= 8 && form.cidade.length >= 2 && form.estado.length > 0;
-  const showSubmit = showFinanceiro && Number(form.renda) > 0;
+  const enderecoCompleto =
+    form.cep.length >= 8 &&
+    form.rua.length >= 2 &&
+    form.numero.length >= 1 &&
+    form.bairro.length >= 2 &&
+    form.cidade.length >= 2 &&
+    form.estado.length > 0;
+  const showFinanceiro = showEndereco && enderecoCompleto;
+  const showSubmit =
+    showFinanceiro &&
+    form.faixaRenda !== "" &&
+    parseBrlInput(form.limiteDesejado) > 0;
 
   // Progress percentage
   const steps = [true, showCpfTel, showEmail, showEndereco, showFinanceiro, showSubmit];
@@ -66,6 +97,12 @@ export default function LeadForm() {
     if (name === "cpfCnpj") formatted = formatCpfCnpj(value);
     else if (name === "telefone") formatted = formatPhone(value);
     else if (name === "cep") formatted = formatCEP(value);
+    else if (name === "limiteDesejado") {
+      // Cap em LIMITE_DESEJADO_MAX
+      const num = parseBrlInput(value);
+      const capped = Math.min(num, LIMITE_DESEJADO_MAX);
+      formatted = capped > 0 ? formatBrlInput(capped.toString()) : "";
+    }
 
     setForm((prev) => ({ ...prev, [name]: formatted }));
     if (errors[name]) {
@@ -82,13 +119,24 @@ export default function LeadForm() {
     setServerError("");
     setErrors({});
 
+    const faixaSelecionada = FAIXAS_RENDA.find((f) => f.value === form.faixaRenda);
+    const rendaNumber = faixaSelecionada?.media ?? 0;
+
     const payload = {
-      ...form,
+      nome: form.nome,
       cpfCnpj: form.cpfCnpj.replace(/\D/g, ""),
+      email: form.email,
       telefone: form.telefone.replace(/\D/g, ""),
       cep: form.cep.replace(/\D/g, ""),
-      renda: Number(form.renda),
-      limiteDesejado: Number(form.limiteDesejado),
+      rua: form.rua,
+      numero: form.numero,
+      complemento: form.complemento || undefined,
+      bairro: form.bairro,
+      cidade: form.cidade,
+      estado: form.estado,
+      renda: rendaNumber,
+      limiteDesejado: parseBrlInput(form.limiteDesejado),
+      negativado: form.negativado,
     };
 
     const result = leadFormSchema.safeParse(payload);
@@ -107,7 +155,7 @@ export default function LeadForm() {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(result.data),
       });
 
       if (!res.ok) {
@@ -212,8 +260,11 @@ export default function LeadForm() {
       <AnimatePresence>
         {showEndereco && (
           <motion.div {...fadeIn} className="overflow-hidden">
-            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 mt-2">
-              Endereço
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">
+              Endereço de entrega do cartão
+            </p>
+            <p className="text-xs text-gray-400 mb-3">
+              É para esse endereço que enviamos o cartão físico.
             </p>
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -226,6 +277,42 @@ export default function LeadForm() {
                   error={errors.cep}
                 />
                 <FormInput
+                  label="Bairro"
+                  name="bairro"
+                  value={form.bairro}
+                  onChange={handleChange}
+                  placeholder="Seu bairro"
+                  error={errors.bairro}
+                />
+              </div>
+              <FormInput
+                label="Rua / Avenida"
+                name="rua"
+                value={form.rua}
+                onChange={handleChange}
+                placeholder="Ex: Av. Paulista"
+                error={errors.rua}
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormInput
+                  label="Número"
+                  name="numero"
+                  value={form.numero}
+                  onChange={handleChange}
+                  placeholder="123"
+                  error={errors.numero}
+                />
+                <FormInput
+                  label="Complemento (opcional)"
+                  name="complemento"
+                  value={form.complemento}
+                  onChange={handleChange}
+                  placeholder="Apto 42, Bloco B"
+                  error={errors.complemento}
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormInput
                   label="Cidade"
                   name="cidade"
                   value={form.cidade}
@@ -233,23 +320,23 @@ export default function LeadForm() {
                   placeholder="Sua cidade"
                   error={errors.cidade}
                 />
-              </div>
-              <div className="space-y-1">
-                <label className="block text-sm font-semibold text-gray-700">
-                  Estado
-                </label>
-                <select
-                  name="estado"
-                  value={form.estado}
-                  onChange={handleChange}
-                  className={`input-field ${errors.estado ? "!border-red-400 focus:!ring-red-400" : ""}`}
-                >
-                  <option value="">Selecione...</option>
-                  {ESTADOS.map((uf) => (
-                    <option key={uf} value={uf}>{uf}</option>
-                  ))}
-                </select>
-                {errors.estado && <p className="text-sm text-red-500 mt-1">{errors.estado}</p>}
+                <div className="space-y-1">
+                  <label className="block text-sm font-semibold text-gray-700">
+                    Estado
+                  </label>
+                  <select
+                    name="estado"
+                    value={form.estado}
+                    onChange={handleChange}
+                    className={`input-field ${errors.estado ? "!border-red-400 focus:!ring-red-400" : ""}`}
+                  >
+                    <option value="">Selecione...</option>
+                    {ESTADOS.map((uf) => (
+                      <option key={uf} value={uf}>{uf}</option>
+                    ))}
+                  </select>
+                  {errors.estado && <p className="text-sm text-red-500 mt-1">{errors.estado}</p>}
+                </div>
               </div>
             </div>
           </motion.div>
@@ -264,28 +351,52 @@ export default function LeadForm() {
               Dados Financeiros
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormInput
-                label="Renda mensal (R$)"
-                name="renda"
-                type="number"
-                value={form.renda}
-                onChange={handleChange}
-                placeholder="5000"
-                min="0"
-                step="0.01"
-                error={errors.renda}
-              />
-              <FormInput
-                label="Limite desejado (R$)"
-                name="limiteDesejado"
-                type="number"
-                value={form.limiteDesejado}
-                onChange={handleChange}
-                placeholder="10000"
-                min="0"
-                step="0.01"
-                error={errors.limiteDesejado}
-              />
+              <div className="space-y-1">
+                <label className="block text-sm font-semibold text-gray-700">
+                  Renda mensal
+                </label>
+                <select
+                  name="faixaRenda"
+                  value={form.faixaRenda}
+                  onChange={handleChange}
+                  className={`input-field ${errors.renda ? "!border-red-400 focus:!ring-red-400" : ""}`}
+                >
+                  <option value="">Selecione a faixa...</option>
+                  {FAIXAS_RENDA.map((f) => (
+                    <option key={f.value} value={f.value}>
+                      {f.label}
+                    </option>
+                  ))}
+                </select>
+                {errors.renda && (
+                  <p className="text-sm text-red-500 mt-1">{errors.renda}</p>
+                )}
+              </div>
+              <div className="space-y-1">
+                <label className="block text-sm font-semibold text-gray-700">
+                  Limite desejado (R$)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium pointer-events-none">
+                    R$
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    name="limiteDesejado"
+                    value={form.limiteDesejado}
+                    onChange={handleChange}
+                    placeholder="5.000"
+                    className={`input-field pl-10 ${errors.limiteDesejado ? "!border-red-400 focus:!ring-red-400" : ""}`}
+                  />
+                </div>
+                <p className="text-xs text-gray-400">
+                  Máximo R$ {LIMITE_DESEJADO_MAX.toLocaleString("pt-BR")}
+                </p>
+                {errors.limiteDesejado && (
+                  <p className="text-sm text-red-500 mt-1">{errors.limiteDesejado}</p>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
