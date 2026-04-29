@@ -18,12 +18,18 @@ const floatingBadges = [
   { label: "Compras Online e Presenciais", x: "15%", y: "95%" },
 ];
 
+const mobileBadges = [
+  "Aceita Negativados",
+  "+93% de Aprovação",
+  "Sem Anuidade",
+];
+
 export default function HeroSection() {
   return (
     <section className="bg-white border-b border-gray-200">
       <div className="max-w-6xl mx-auto px-4 py-10 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          {/* Left column */}
+          {/* Left column (texto + cartão mobile inline) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -39,6 +45,36 @@ export default function HeroSection() {
               Aprovado por bancos internacionais, funciona como qualquer cartão
               brasileiro. Use em real, dólar, euro ou qualquer moeda do mundo.
             </p>
+
+            {/* Cartão mobile - APARECE entre subhead e CTA no mobile */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="lg:hidden -mx-2 my-1"
+            >
+              <div className="w-full max-w-xs mx-auto mb-4">
+                <CreditCard
+                  nome="Cartão Internacional"
+                  bandeira="visa"
+                  corPrimaria="#0F172A"
+                  corSecundaria="#334155"
+                  corTexto="#ffffff"
+                  holderName="SEU NOME AQUI"
+                />
+              </div>
+              <div className="flex flex-wrap justify-center gap-1.5">
+                {mobileBadges.map((label) => (
+                  <span
+                    key={label}
+                    className="bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full px-3 py-1 text-[11px] font-semibold flex items-center gap-1"
+                  >
+                    <CheckCircleIcon size={11} className="text-emerald-600 shrink-0" />
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
 
             {/* Destaques - só desktop */}
             <div className="hidden lg:flex flex-wrap gap-3">
@@ -70,21 +106,24 @@ export default function HeroSection() {
             </div>
 
             {/* Trust signals */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs lg:text-sm text-gray-400">
-              <div className="flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs lg:text-sm text-gray-400">
+              <span className="flex items-center gap-1.5">
                 <ShieldCheckIcon size={14} className="text-emerald-500" />
-                <span>Dados protegidos</span>
-              </div>
-              <div className="flex items-center gap-1.5">
+                Dados protegidos
+              </span>
+              <span className="text-gray-300">·</span>
+              <span className="flex items-center gap-1.5">
                 <CheckCircleIcon size={14} className="text-emerald-500" />
-                <span>+5.000 cartões emitidos</span>
-              </div>
-              <span className="text-gray-300 hidden sm:inline">|</span>
-              <span>CNPJ 85.557.385/0001-45</span>
+                +5.000 cartões emitidos
+              </span>
+              <span className="text-gray-300 hidden sm:inline">·</span>
+              <span className="basis-full sm:basis-auto">
+                CNPJ 85.557.385/0001-45
+              </span>
             </div>
           </motion.div>
 
-          {/* Desktop: Card with floating glass badges */}
+          {/* Right column DESKTOP - Card + 5 floating badges */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -119,36 +158,6 @@ export default function HeroSection() {
                     </span>
                   </div>
                 </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Mobile: Card compact + badges inline */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:hidden"
-          >
-            <div className="w-full max-w-xs mx-auto mb-5">
-              <CreditCard
-                nome="Cartão Internacional"
-                bandeira="visa"
-                corPrimaria="#0F172A"
-                corSecundaria="#334155"
-                corTexto="#ffffff"
-                holderName="SEU NOME AQUI"
-              />
-            </div>
-            <div className="flex flex-wrap justify-center gap-1.5">
-              {floatingBadges.map((badge) => (
-                <span
-                  key={badge.label}
-                  className="bg-gray-100 text-gray-700 rounded-full px-3 py-1 text-[11px] font-semibold flex items-center gap-1"
-                >
-                  <CheckCircleIcon size={11} className="text-emerald-500 shrink-0" />
-                  {badge.label}
-                </span>
               ))}
             </div>
           </motion.div>

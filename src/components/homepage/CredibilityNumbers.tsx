@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const metrics = [
   { value: "+5.000", label: "cartões emitidos" },
-  { value: "98%", label: "taxa de aprovação" },
+  { value: "93%", label: "taxa de aprovação" },
   { value: "4.8/5.0", label: "avaliação dos clientes" },
   { value: "27", label: "estados atendidos" },
 ];

@@ -22,6 +22,7 @@ export default function PropostaPage() {
   const [view, setView] = useState<View>("loading");
   const [accepting, setAccepting] = useState(false);
   const [declining, setDeclining] = useState(false);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!proposalId) {
@@ -51,16 +52,28 @@ export default function PropostaPage() {
   async function handleAccept() {
     if (!proposalId || accepting) return;
     setAccepting(true);
+    setAcceptError(null);
     try {
       const res = await fetch(`/api/proposals/${proposalId}/accept`, {
         method: "POST",
       });
-      if (!res.ok) throw new Error("Falha ao aceitar proposta");
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const message =
+          typeof data?.error === "string"
+            ? data.error
+            : `Erro ao aceitar proposta (HTTP ${res.status})`;
+        throw new Error(message);
+      }
       setPaymentId(data.paymentId);
       router.push("/processando");
     } catch (err) {
       console.error("Error accepting proposal:", err);
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Não foi possível aceitar a proposta. Tente novamente.";
+      setAcceptError(message);
       setAccepting(false);
     }
   }
@@ -221,6 +234,17 @@ export default function PropostaPage() {
                 >
                   {accepting ? "Processando..." : "Aceitar Proposta"}
                 </button>
+                {acceptError && (
+                  <div
+                    role="alert"
+                    className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3 leading-relaxed"
+                  >
+                    <p className="font-semibold mb-0.5">
+                      Não foi possível processar agora
+                    </p>
+                    <p className="text-red-600 text-xs">{acceptError}</p>
+                  </div>
+                )}
                 <button
                   onClick={handleDecline}
                   disabled={declining}

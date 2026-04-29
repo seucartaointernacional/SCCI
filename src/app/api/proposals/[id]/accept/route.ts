@@ -74,14 +74,21 @@ export async function POST(
       });
 
       console.error("NowBanks createDeposit failed:", depositError);
-      const status = depositError instanceof NowBanksError ? 502 : 500;
-      return NextResponse.json(
-        { error: "Não foi possível processar o pagamento. Tente novamente." },
-        { status }
-      );
+      const isNowBanksErr = depositError instanceof NowBanksError;
+      const status = isNowBanksErr ? 502 : 500;
+      const detail = isNowBanksErr
+        ? `Pagamento (NowBanks ${depositError.endpoint} ${depositError.status}): ${depositError.detail.slice(0, 200)}`
+        : depositError instanceof Error
+        ? `Pagamento: ${depositError.message.slice(0, 200)}`
+        : "Não foi possível processar o pagamento. Tente novamente.";
+      return NextResponse.json({ error: detail }, { status });
     }
   } catch (error) {
     console.error("Error accepting proposal:", error);
-    return NextResponse.json({ error: "Erro interno do servidor" }, { status: 500 });
+    const detail =
+      error instanceof Error
+        ? `Erro interno: ${error.message.slice(0, 200)}`
+        : "Erro interno do servidor";
+    return NextResponse.json({ error: detail }, { status: 500 });
   }
 }
