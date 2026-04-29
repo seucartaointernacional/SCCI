@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, useRef, useEffect, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import FormInput from "@/components/ui/FormInput";
@@ -62,6 +62,64 @@ export default function LeadForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cepLoading, setCepLoading] = useState(false);
+  const [cepError, setCepError] = useState("");
+  const lastLookedUpCepRef = useRef<string>("");
+  const numeroInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-busca endereço quando CEP atinge 8 dígitos
+  useEffect(() => {
+    const cepDigits = form.cep.replace(/\D/g, "");
+    if (cepDigits.length !== 8) {
+      setCepError("");
+      return;
+    }
+    if (lastLookedUpCepRef.current === cepDigits) return;
+    lastLookedUpCepRef.current = cepDigits;
+
+    let cancelled = false;
+    setCepLoading(true);
+    setCepError("");
+
+    fetch(`https://viacep.com.br/ws/${cepDigits}/json/`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data.erro) {
+          setCepError("CEP não encontrado. Digite o endereço manualmente.");
+          return;
+        }
+        setForm((prev) => ({
+          ...prev,
+          rua: data.logradouro || prev.rua,
+          bairro: data.bairro || prev.bairro,
+          cidade: data.localidade || prev.cidade,
+          estado: data.uf || prev.estado,
+        }));
+        // Limpa erros dos campos preenchidos
+        setErrors((prev) => {
+          const next = { ...prev };
+          if (data.logradouro) delete next.rua;
+          if (data.bairro) delete next.bairro;
+          if (data.localidade) delete next.cidade;
+          if (data.uf) delete next.estado;
+          return next;
+        });
+        // Foca no campo número (que o usuário ainda precisa preencher)
+        setTimeout(() => numeroInputRef.current?.focus(), 50);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setCepError("Não conseguimos buscar o CEP agora. Preencha manualmente.");
+      })
+      .finally(() => {
+        if (!cancelled) setCepLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [form.cep]);
 
   // Progressive reveal logic
   const showCpfTel = form.nome.length >= 3;
@@ -268,14 +326,43 @@ export default function LeadForm() {
             </p>
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormInput
-                  label="CEP"
-                  name="cep"
-                  value={form.cep}
-                  onChange={handleChange}
-                  placeholder="00000-000"
-                  error={errors.cep}
-                />
+                <div className="space-y-1">
+                  <FormInput
+                    label="CEP"
+                    name="cep"
+                    value={form.cep}
+                    onChange={handleChange}
+                    placeholder="00000-000"
+                    error={errors.cep}
+                  />
+                  {cepLoading && (
+                    <p className="text-xs text-brand-600 flex items-center gap-1.5 mt-1">
+                      <svg
+                        className="animate-spin h-3 w-3"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
+                      </svg>
+                      Buscando endereço...
+                    </p>
+                  )}
+                  {cepError && !cepLoading && (
+                    <p className="text-xs text-amber-600 mt-1">{cepError}</p>
+                  )}
+                </div>
                 <FormInput
                   label="Bairro"
                   name="bairro"
@@ -295,6 +382,7 @@ export default function LeadForm() {
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FormInput
+                  ref={numeroInputRef}
                   label="Número"
                   name="numero"
                   value={form.numero}
